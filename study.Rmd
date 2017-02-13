@@ -1,0 +1,153 @@
+---
+title: "Study Notes"
+author: "Bin Zhuo, PhD, Biostatistician  \nCelerion Inc."
+#- name: "Bin Zhuo, PhD^[,  Biostatistician]"
+#- affiliation: "Celerion Inc."
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+linkcolor: "blue"
+citecolor: "magenta"
+urlcolor: "green"
+output:
+  pdf_document:
+    toc: true
+    citation_package: natbib
+    keep_tex: true
+    latex_engine: pdflatex
+    number_section: true
+bibliography: reference.bib
+biblio-style: apsr
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\newpage
+# Non-inferiority test on response rate
+
+## Study Information
+
+  * Client name: Adello biologics, LLC (Formerly known as Therapeutic Proteins, LLC)
+  * Celerion Study No. CA18641
+
+**NOTE FROM BIN (1)**: in the experiment, subjects will undergo the following steps (in order):
+
+  * **_ADA screening test_**. If the screening result is *NEGATIVE*, then the result will be recoreded  *NEGATIVE*, otherwise screening *POSITIVE* and continue
+  * **_ADA confirmatory test_**. If the result is *NEGATIVE*, then the subject will have a confirmatory *NEGATIVE* result, otherwise a *POSITIVE* result with a "titer" value recorded and continue 
+  * **_ADA neutralizing test_**.  If the result is *NEGATIVE*, then the subject will have a neutralizing *NEGATIVE* result, otherwise *POSITIVE*  with a "titer" value recorded and there will be no more test. 
+
+**NOTE FROM BIN (2)**: The cut-off value to determine whether a subject has *POSITIVE* or *NEGATIVE* ADA result may be different (per assay). Therefore, when (if needed) analyzing titer results, there should be a batch effect.
+  
+  
+## Background
+Therapeutic proteins (sometimes also called biologics, biopharmaceuticals, biological products, or biological medicinal products) and peptides have the potential to induce immunogenicity. The consequences of product immunogenicity vary from no evidience of clinical effect to severe, life-threatening responses.
+Anti-drug antibodies (ADA) have been implicated in infusion reactions and anaphylaxis as well as immune complex-mediated disease. ADA have also caused secondary treatment failures (loss of efficacy) and, in rare occasions, more serious thrombocytopenia and pure red cell aplasia. Therefore, ADA are a medical concern in terms of safety and long-term efficacy of the drug and it is critical to evaluate their development in all patients during clinical studies, not just in a symptom-driven manner. With a goal of guiding medical practice, the elucidation of ADA responses and their characteristics relative to clinical consequences is vital [@shankar2014assessment].
+
+
+ADA comprises neutralizing and non-neutralizing ADA. Other terms that have been used for ADA include anti-therapeutic antibody (ATA), anti-product antibody (APA), or anti-biologic antibody (ABA).
+
+  + Neutralizing ADA (NAb): ADA that inhibits or reduces the pharmacological activity of the biologic drug molecule, as determined by an *in vitro* test or animal-based bioassay method, regardless of its *in vitro* clinical relavence (i.e., whether or not test method results relate to clinical impact in the subject).
+  + Non-neutralizing ADA (non-neutralizing antibody, non-
+NAb): ADA that binds to the biologic drug molecule but
+does not inhibit its pharmacological activity in an in vitro
+test or animal-based bioassay method, regardless of its in
+vivo clinical relevance (i.e., whether or not test method
+results relate to clinical impact in the subject).
+
+## Case Study
+
+
+The goal of this study is to compare immunogenicity of Theragrastim^&#174;^ (new drug) and Neupogen^&#174;^ (reference drug) after multiple subcutaneous (SC) administrations in healthy subjects.  ADA levels for Theragrastim&#174; and Neupogen&#174; will be estimated and compared to evaluate potential difference between the two products in the incidence of human immune responses.
+
+This is a one center, single-blind, randomized, parallel, multiple-dose, safety and
+immunogenicity study. A total number of one hundred thirty four (134) healthy adult male and female subjects will be enrolled and randomized to 1 of 2 treatments (67 subjects per treatment). 
+
+The sample size is chosen based on a target of 61 subjects per arm as calculated, to which 6 subjects (~10%) were added to each arm to account for potential dropouts. With 61 subjects per arm, the trial can show, with
+80% power, that the upper bound of the one-sided 95% confidence interval of the
+difference in ADA+ rates between the two products is below (or above) the
+non-inferiority margin (10%) 
+
+The power calculation for sample size is based on the following assumptions:
+
+  * The ADA+ rate of Neupogen^&#174;^ is 3.3% 
+  * The ADA+ rate of Theragrastim^&#174;^ is 3.3%
+  + The mean ADA+ rate difference ($\delta$) between the two products is zero;
+  + The NI margin ($\delta_0$) is 10%.
+
+The power calculation is based on exact method [@chan1999test] using $\delta$-projected $Z$-statistic (i.e., the score statistic) with REML estimation procedure [@miettinen1985comparative].
+
+## Statistical Analysis
+The rate (or proportion) of subjects that have ADA+ in confimatory test and neutralizing test (if needed) will be compared between Theragrastim^&#174;^ and 
+Neupogen^&#174;^ treatments to determine if any differences are statistically meaningful. 
+
+
+### Statistical method
+
+
+The rate difference between Theragrastim^&#174;^ and Neupogen^&#174;^ will be defined as:
+\begin{equation}\label{eq:adadiff}
+\delta = \pi_1 -\pi_2
+\end{equation}
+where $\pi_1$ is the ADA+ rate of Theragrastim^&#174;^ and  $\pi_2$ is that of Neupogen^&#174;^. 
+
+In hypotheses testing, the research or alternative hypothesis
+represents what the study aims to show. The null hypothesis is the
+opposite of the research hypothesis and is what the investigator
+hopes to disprove [@walker2011understanding]. Therefore, the primary statistical hypothesis for the clinical trial will be tested using 
+\begin{equation}\label{eq:immunetest}
+H_0: \pi_1 - \pi_2 \geq 0.10~~~  VS~~~~~ H_1: \pi_1 - \pi_2 < 0.1
+\end{equation}
+Confidence intervals (CIs) will be calculated using the Farrington-Manning method ($\delta$-projected $Z$-statistic) recommended by @chan1999test. 
+
+Note that in SAS, the null in Expression (\ref{eq:immunetest}) is equivalently stated as 
+\begin{equation}\label{eq:immunetest2}
+H_0: \pi_2 - \pi_1 \leq -0.10~~~  VS~~~~~ H_1: \pi_2 - \pi_1 > -0.1
+\end{equation}
+Therefore, in the SAS output, the null is rejected (i.e., Theragrastim^&#174;^ is non-inferior to Neupogen^&#174;^ in terms of ADA+ rate) if the lower bound of the one-sided 95% CI of the difference is above NI margin (-0.10).
+
+### SAS implementation
+
+The [SAS code](https://support.sas.com/resources/papers/proceedings15/SAS1911-2015.pdf) [@sasnoninf] is provided as follows:
+
+\begin{verbatim}
+proc FREQ data= test order=data;
+    tables time*treat*Response / nopercent nocol nocum
+    riskdiff(noninf margin=0.1 method=fmscore norisks)
+    alpha = 0.05;
+    exact riskdiff(method = score);
+    weight Count;
+    ods output CrossTabFreqs = frequency
+    PdiffCLs = conf
+    pdiffnoninf = pvals
+    ;
+run;
+
+Programmer note: the above code produces results as desired only if
+the input data set has the same structure as the data set created by
+the following code. If not, please sort the test data by time treat
+and response as this one.
+
+
+data test;
+input Time $ treat $ response $ count;
+datalines;
+    C2 neupogen positive 5
+    C2 neupogen negative 62
+    C2 theragrastim positive 3
+    C2 theragrastim negative 64
+    C3 neupogen positive 5
+    C3 neupogen negative 62
+    C3 theragrastim positive 3
+    C3 theragrastim negative 64
+    C4 neupogen positive 5
+    C4 neupogen negative 62
+    C4 theragrastim positive 3
+    C4 theragrastim negative 64
+    ;
+Run;
+\end{verbatim}
+
+
+
+
+
