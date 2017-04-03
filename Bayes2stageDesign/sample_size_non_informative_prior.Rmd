@@ -1,0 +1,144 @@
+---
+title: "Sample size analysis with non informative prior"
+author: "BZ"
+date: "March 17, 2017"
+header-includes: 
+   - \usepackage{color}
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, message=FALSE, warning=FALSE)
+```
+
+## Sample size calculation using non informative prior
+
+The choice of non-informaitve prior for binomial distribution resulting in posterior distribution see http://www.stats.org.uk/priors/noninformative/YangBerger1998.pdf
+
+  + if we choose Beta(1,1), that is, the uniform distribution, then the posterior mean ADA+ rate would be (x + 1)/(n + 2) where x and n are the number of ADA+ incidence and the total number of subjects at cohort 1, respectively; 
+  +  if we choose Jefferys' prior, then the posterior mean ADA+ rate would be (x + 0.5)/(n + 1).
+
+In the following section, we'll base sample size re-estimation on these two non-informative priors. Note that the initial sample size 102 (with 46 in the first cohort) is calculated based on the assumption that ADA+ rate is 1%. 
+
+The following is variable specifications for tables below:
+
+  + n_ADA: number of ADA observed in cohort 1
+  + n_cohort1: number of subjects enrolled in cohort 1
+  + obs_ADA_rate: n_ADA/n_cohort1
+  + posterior_ADA_rate: obtained using Bayes prior and data from cohort 1
+  + N_required_per_arm: sample size re-estimated using posterior_ADA_rate. This number has already accouted for 10% drop out. 
+  + N_increased_per_arm: number of subjects needed per arm (N_required_per_arm - 51, and 51 is sample size per arm originally).
+  
+  \textcolor{red}{Please note that these sample sizes may change due to the type 1 error analysis, addressing comment 3 from FDA.}
+
+```{r}
+library(gsDesign)
+library(knitr)
+n_prior <- function(alpha, beta, x = 0:7, n = 46, total = 102){
+
+  p_posterior <- (alpha + x)/(alpha + beta + n)
+  
+  nsize <- nBinomial(p1 = p_posterior, p2= p_posterior, alpha  = 0.05, beta = 0.2, delta0 = -0.1, 
+                     ratio = 1, sided = 1, outtype = 2)
+  final_n <- ceiling(as.vector(ceiling(nsize)[, 1])*1.1)
+  # additional
+  addtional <- ceiling(final_n)-total/2
+  addtional[addtional<0] <- 0
+  result <- data.frame(n_ADA = x, n_cohort1 = n, obs_ADA_rate = round(x/n, 4), 
+                       posterior_ADA_rate = round(p_posterior, 4), 
+                       N_required_per_arm = final_n, N_increase_per_arm = addtional)
+  return(result)
+}
+
+```
+\newpage
+
+# when initial ADA rate is 1%
+
+In this part, the initial sample size 102 (with 46 in the first cohort) is calculated based on the assumption that ADA+ rate is 1%. 
+
+## Uniform prior
+```{r}
+alpha <- beta <- 1
+kable(n_prior(alpha=1, beta=1))
+```
+
+
+
+## Jeffery's prior
+```{r}
+alpha <- 1/2; beta <- 1/2
+kable(n_prior(alpha=1/2, beta=1/2))
+```
+
+## Reproducing Table 1 using our package
+
+```{r}
+kable(n_prior(alpha =1, beta = 100))
+```
+
+\newpage
+# when initial ADA rate is 3%
+
+In this part, the initial sample size 132 (with 60 in the first cohort) is calculated based on the assumption that ADA+ rate is 3%. 
+
+
+
+## Uniform prior
+```{r}
+alpha <- beta <- 1
+kable(n_prior(alpha=1, beta=1, n = 60, total = 132))
+```
+
+
+## Jeffery's prior
+```{r}
+alpha <- 1/2; beta <- 1/2
+kable(n_prior(alpha=1/2, beta=1/2, n = 60, total = 132))
+```
+
+
+\newpage
+# Posterior distribution based on Jeffreys prior and 1% initial ADA rate
+
+```{r}
+library(dplyr)
+
+dens <- function(x, n, p){
+  prob <- dbeta(p, shape1 = x + 1/2, shape2 = n - x + 1/2)
+  data <- data.frame(p = p, density = prob)
+  return(data)
+}
+ p <- seq(0.01, 0.99, by = 0.001)    # 
+  prior <- 1/pi*p^(-0.5)*(1-p)^(-0.5)
+  dat <-  data.frame(p = p, density = prior, case = " Prior") 
+  n <- 46
+  p1 <- dens(x = 1, n = 46, p = p) %>% mutate(case = "Posterior Est from the Interim Rate = 1/46")
+  p2 <- dens(x = 3, n = 46, p = p) %>% mutate(case = "Posterior Est from the Interim Rate = 3/46")
+  p3 <- dens(x = 5, n = 46, p = p) %>% mutate(case = "Posterior Est from the Interim Rate = 5/46")
+  
+
+  den <- bind_rows(dat, p1, p2, p3)
+  
+library(ggplot2)
+  
+  ggplot(data = den, aes(x = p, y = density)) + geom_line(aes(color = case)) + 
+      facet_wrap(~case, scales = "free") + 
+      theme(legend.position = "none")
+  
+  
+
+```
+The top left is the Jeffreys prior. The top right shows the posterior distribution Beta(1.5, 45.5); 
+The lower left Beta(3.5, 43.5) and the lower right Beta(5.5, 41.5).
+
+
+
+
+
+
+
+
+
+
+

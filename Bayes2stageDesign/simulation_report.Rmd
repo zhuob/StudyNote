@@ -1,0 +1,365 @@
+---
+title: "APPENDIX C TYPE 1 ERROR SIMULATION RESULTS"
+# author: "Bin Zhuo"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+header-includes: 
+   - \usepackage{color}
+output: 
+  pdf_document:
+    citation_package: natbib
+    latex_engine: pdflatex
+    number_section: true
+    fig_caption: yes
+bibliography: reference.bib
+biblio-style: apsr
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = FALSE, message = FALSE)
+```
+
+
+# Introduction
+
+This serves as a supplementary document to support the interim analysis plan (IAP) for Protocol ADL-CL-112. Adello Biologics, LLC (Sponsor) submitted the protocol on January 31, 2017 for study drug TPI-120. The submission contained a clinical information amendment that incorporates the Agency's feedback received during the BPD Type 2 meeting held on October 5, 2016, Meeting Minutes, and the FDA's Advice/Information Request dated January 6, 2017 regarding the Bioanalytical Analysis Plan. Upon review of the submission, FDA made further comments as follows: 
+
++ "In your proposed interim analysis, you used a prior distribution of Beta(1, 100) to calculate the posterior incidence rate. Beta(1,100) is a prior distribution derived based on an assumed ADA rate of 1%.  However, we expect that the ADA rate would likely be more than 3% or even higher than 6%; thus, your prior may be too optimistic for US-Neulasta and your proposed biosimilar product. The sample size calculation based on Bayesian analysis with this prior could severely underestimate the sample size needed. Consider an alternative weak- prior distribution to calculate the sample size needed."
+    +  *This has been resolved in the resubmitted IAP. FDA suggests a weaker prior, such as uniform (0, 1) distribution (a special case beta distribution, Beta(1,1)). We chose Jeffreys prior (for details, see resubmitted IAP) to re-estimate additional subjects needed for this study based on the results in Cohort 1.*
+
++ "We remind you that the Bayesian analysis with your proposed strong prior cannot be used to support a conclusion of non-inferiority, and hence support a demonstration of no clinically meaningful differences in ADA rate, either at the interim analysis or at the final analysis."
+    +  *FDA has confirmed that the conclusion of non-inferiority can be made if we have sufficient sample size. The number of additional subjects needed are presented in Table 1 (updated as necessary) of the IAP. Additionally, we will demonstrate that the desired power can be achieved, according to simulation studies summarized in this document.*
+
+ + "You included a blinded sample size re-estimation. Note that, even with a blinded sample size re-estimation, the type-I error rate can still be inflated in a non-inferiority or an equivalence study [@golkowski2014blinded]. Please provide type-I error control strategy or demonstrate the magnitude of type I error rate inflation is negligible (e.g. <0.001) by simulation or alternative methods."
+
+
+Throughout this document, we will focus on Comment 3 and demonstrate by simulation that type 1 error is not inflated in this study design.
+
+# Method
+This study compares the ADA+ incidence rate of study drug (T) with that of reference drug (R). The Sponsor wants to prove that T is not inferior to R in terms of ADA+ rate. The ADA+ rate difference between T and R is defined as 
+    \begin{equation}\label{eq:adadiff}
+    \delta = p_t -p_r
+    \end{equation}
+where $p_t$ is the ADA+ rate in treatment T, and $p_r$ is the ADA+ rate in treatment R. The primary statistical hypothesis for the clinical trial will be tested using 
+    \begin{equation}\label{eq:immunetest}
+    H_0: p_t - p_r \geq \delta~~~  VS~~~~~ H_1: p_t - p_r < \delta
+    \end{equation} 
+In this study, $\delta$ is set to be 0.1 (i.e., this hypothesis test will decide whether or not the confirmed ADA+ rates between the two products is below the non-inferiority margin 10%.). We'll use Chan's exact method [@chan1998exact, @chan1999test] to perform non-inferiority hypothesis testing. Maximum likelihood (ML) [@farrington1990test] will be selected to estimate nuisance parameters $p_t$ and $p_r$ under the null $H_0$.
+
+# Software implementation 
+The Sponsor's biostatistics team implemented Chan's method using R [@Rpackage] software. The R code is provided along with the IAP. The software information is listed below
+```{r}
+version
+```
+
+# Verification of the R code
+To show that the biostatistics team has implemented Chan's method correctly, we will reproduce the results given in Chan's paper [@chan1998exact]. The following pacakges/code are installed or loaded for this purpose.
+
+```{r, echo=TRUE}
+source("H:/Projects/CA20737/protocol_revision/FM_score.R")
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
+
+```
+
+## Reproducing Figure 1
+Chan illustrated in the paper that replationship of true levels and sample sizes for the equivalence test based on normal approximation.
+
+
+```{r, fig.height =4 , fig.width=6, fig.cap = "True levels of the test of equivalence at the 0.05 nominal level based on normal approximation using the constrained ML estimate of the variance"}
+size <- 1:100
+alpha1 <- alpha2 <- alpha3 <- c()
+
+for (i in 1: length(size)){
+  alpha1[i] <- true_alpha_normal_app(alpha = 0.05, n1 = size[i], n2 =size[i], delta = 0, p2 = 0.95)
+  alpha2[i] <- true_alpha_normal_app(alpha = 0.05, n1 = size[i], n2 =size[i], delta = 0.2, p2 = 0.5)
+  alpha3[i] <- true_alpha_exact(n1 = size[i], n2 = size[i], delta = 0.2, p2 = 0.50, alpha = 0.05)
+}
+
+result <- data.frame(nsize = c(size, size), true_level = c(alpha1, alpha2),
+                     test = rep(c("P1 = 0.95, delta = 0",
+                      "P1 = 0.70, delta = 0.2"), each = length(size))) %>%
+                 filter(!is.na(true_level))
+
+
+ggplot(data = result, aes(x = nsize, y = true_level)) +
+  geom_line(aes(color = test, linetype = test)) +
+  geom_hline(yintercept = 0.05) + ylim(0, 0.1) +
+  theme(legend.position = c(.8, 0.75)) 
+ 
+```
+
+## Reproducing Figure 2
+Chan calculated the true levels of the exact equivalence test at the nominal 0.05 level for the example of $P_1 = 0.7, \delta = 0.2$ under the null hypothesis (\ref{eq:immunetest}) .
+
+
+
+```{r, fig.height =4 , fig.width=6, fig.cap = "True levels of the test of equivalence at the 0.05 nominal level given P1 = 0.7 and delta = 0.2"}
+
+result <- data.frame(nsize = c(size, size), true_level = c(alpha2, alpha3),
+          test = rep(c("Normal Approximation", "Exact Test"), each = length(size))) %>%
+        filter(!is.na(true_level))
+
+
+
+ggplot(data = result, aes(x = nsize, y = true_level)) +
+  geom_line(aes(color = test, linetype = test)) +
+  geom_hline(yintercept = 0.05) + ylim(0, 0.1) +
+  theme(legend.position = c(.8, 0.75)) 
+
+
+```
+
+
+
+## Reproducing numerical results in Example 1
+
+In the first example (Chan's paper page 1410), Chan reported a $p$-value of 0.0017 which occurred at $P=0.441$. We report
+```{r}
+p2_search <- seq(0.001, 0.900, by = 0.001)
+result <- tail_prob(69, 83, 76, 88, delta = 0.1, p2_search = p2_search)
+result %>% filter(p_exact == max(p_exact))
+```
+
+
+# Simulation 
+
+In this part, we will simulate the outcome of the two-stage clinical trial and perform non-inferiority test to evaluate the type 1 error and power. 
+
+## Simulation setup
+
+  + Set a starting sample size $2n_1$ for Cohort 1 (currently 46), and assign $n_{11}$ = 23 to treatment T and $n_{21}$ = 23 to treatment R. If the sizes of the two treatments are not necessarily equal, we can use `n11 = sum(rbinom(46, size = 1, prob = 0.5))` and $n_{21} = 2n_1 - n_{11}$.  For simplification purpose, we assume equal sample size for each treatment. We assume that, for each treatment group, the sample size is $n_1$ for Cohort 1 and $n_i$ for additional subjects. 
+  + Let $X_1$ be the random variable, representing the number of ADA+ subjects in the test group for Cohort 1. We assume $X_1$ follows a binomial distribution with probability $p_t$, that is,  $X_1\sim$ Bin($n_1, p_t$). For the remaining part, $X_2\sim$ Bin($n_2, p_t$). Therefore $p_t$ is the true ADA+ rate for T. Let $X = X_1 + X_2$, then $X$ is a random variable for the total number of observed ADA subjects. Note that $X\sim Bin(n_1 + n_2, p_1)$. We'll keep $p_t$ fixed across each simulated experiment.
+  + Similarly, $Y_1\sim Bin(n_1, p_r)$ and $Y_2\sim Bin(n_2, p_r)$. Let $Y= Y_1 + Y_2$ be the random variable representing the total number of ADA+ subjects and we have $Y\sim Bin(n_1 + n_2, p_r)$.
+  
+  
+ 
+## Simulation step 
+
+  a.  Specify $p_t$ and $p_r$. For example, if we set $p_t = 0.16, p_r = 0.02$ (i.e., the null in Eq. (\ref{eq:immunetest}) is true) then we evaluate type 1 error; instead, if $p_t = 0.01$ and $p_r = 0.05$ (i.e., the alternative hypothesis is true), then we simulate the power.
+  b.  Given sample size $n_1$, simulate number of ADA+ subjects $x_1$ from $Bin(n_1, p_t)$ for T, and $y_1$ from $Bin(n_1, p_r)$ for R.
+  c. Based on the total number of ADA+ subjects $x_1 + y_1$ in Cohort 1, update the Bayes posterior. Then calculate additional subjects $n_2$ needed in each treatment.
+  d. Simulate the outcome for the remaining part of the experiment. As a result, $x_2$ and $y_2$ are the number of ADA+ subjects in T and R, respectively.
+  e. Unblind the data.  Therefore $x = x_1 + x_2$ (out of $n_1 + n_2$ samples) is the ADA+ subjects in T, and $y= y_1 + y_2$ (out of $n_1 + n_2$ samples) the ADA+ subjects in R. 
+  f. Conduct hypothesis testing and record the $p$-value obtained from the test procedure. 
+  g. Repeat step (b) - (f) for $K = 1000$ times, resulting in 1000 p values. 
+ + The resulting type 1 error rate (or power, depending on the parameter configuration) is 
+ \begin{equation}
+    \frac{\#~p~values < significance~level}{K}
+ \end{equation}
+ 
+## Simulation parameter configuration
+We perform three groups of simulation, two for evaluating type 1 error and one for power. The parameter configuration is presented in table below (note that $\delta = p_t - p_r$)
+
+Table: Type 1 error simulation with fixed margin $\delta$.
+
+| $\delta$ | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 |
+| -------- | -----| -----| -----| -----| -----| -----| -----| -----| -----| -----|
+| $p_t$    | 0.11 | 0.12 | 0.13 | 0.14 | 0.15 | 0.16 | 0.17 | 0.18 | 0.19 | 0.20 |
+| $p_r$    | 0.01 | 0.02 | 0.03 | 0.04 | 0.05 | 0.06 | 0.07 | 0.08 | 0.09 | 0.10 |
+
+Table: Type 1 error simulation with fixed $p_r$.
+
+| $\delta$ | 0.10 | 0.11 | 0.12 | 0.13 | 0.14 | 0.15 | 0.16 | 0.17 | 0.18 | 0.19 | 0.20 |
+| -------- | -----| -----| -----| -----| -----| -----| -----| -----| -----| -----| -----|
+| $p_t$    | 0.14 | 0.15 | 0.16 | 0.17 | 0.18 | 0.19 | 0.20 | 0.21 | 0.22 | 0.23 | 0.24 |
+| $p_r$    | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 |
+
+
+
+Table: Power simulation with fixed $p_r$.
+
+| $\delta$ |-0.03 |-0.02 |-0.01 | 0.00 | 0.01 | 0.02 | 0.03 | 0.04 | 0.05 | 0.06 |
+| -------- | -----| -----| -----| -----| -----| -----| -----| -----| -----| -----|
+| $p_t$    | 0.01 | 0.02 | 0.03 | 0.04 | 0.05 | 0.06 | 0.07 | 0.08 | 0.09 | 0.10 |
+| $p_r$    | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 |
+
+## Simulation output
+
+Under each parameter setting, we simulate $K = 1000$ experiment following the above simulation steps. The simulation results are stored in a ``csv`` file for each table. In each data set, we report the following outcome:
+
+Table: Variable specification of the simulated data set
+
+  |Variable     | Origin     | Description                                                      | 
+  |-------------|------------| ---------------------------------------------------------------- | 
+  |n_per_arm    |calculated  | total number of subjects needed for each treatment .             |
+  | $n_1$|pre-specified  | number of subjects enrolled in Cohort 1.|
+  | $n_2$|calculated  | additional number of subjects enrolled.
+  | $x_1$| simulated |number of ADA+ subjects in Cohort 1 in treatment group (T). 
+  | $x_2$| simulated | number of ADA+ subjects out of the remaining subjects in treatment group (T).
+  | $y_1$| simulated | number of ADA+ subjects in Cohort 1 in reference group (R).
+  | $y_2$| simulated | number of ADA+ subjects out of the remaining subjects in reference group (R).
+  | pval_exact| calculated | the p value calcluated using Chan's exact method [@chan1998exact].
+  | alpha_exact|calculated  | the (calibrated) true significance level calculated using Chan's exact method.
+  | pval_norm_apr|calculated  | the p value calculated using Farrington-Manning [@farrington1990test] statistics (normal approximation)
+  | alpha_norm|calculated  | the (calibrated) true significance level calculated using Chan's exact method based on FM statistics.
+  | pt_true|pre-specified | true ADA+ probability in T.
+  | pr_true|pre-specified | true ADA+ probability in R.
+  | alpha_nominal|pre-specified  | the nominal significance level, set to be 0.05 acorss all simulations.
+
+
+
+
+ 
+The first few rows of group 1 simulation are like this:
+
+```{r}
+## type 1 error simulation
+er2 <- read.csv("H:/Projects/CA20737/protocol_revision/Simu_results/type1error_setup1.csv", header =T)
+er1 <- read.csv("H:/Projects/CA20737/protocol_revision/Simu_results/type1error_setup2.csv", header =T)
+pwr1 <- read.csv("H:/Projects/CA20737/protocol_revision/Simu_results/power_setup1.csv", header =T)
+
+
+table_summary <- function(data){
+  result <- data %>% group_by(pt_true, pr_true) %>%
+                summarize(r_exact_exact_level = mean(pval_exact <= alpha_exact), 
+                          r_norm_exact_level  = mean(pval_norm_apr <= alpha_norm),
+                          r_exact_nominal_level = mean(pval_exact <= alpha_nominal), 
+                          r_norm_nominal_level = mean(pval_norm_apr <= alpha_nominal)) 
+    
+  return(result)
+  }
+
+row_names <- c("ADA(T)", "ADA(R)", "exact(Chan)", "exact(FM)", "nominal(Chan)", "nominal(FM)")
+
+head(er1, 10)
+```
+
+
+# Results
+This section consists of type 1 error and power simulation results.
+
+## Type 1 error
+We performed two groups of simulations to evaluate type 1 error. The parameter configurations are given in Table 1 and Table 2 above. 
+
+### Group 1: fixed margin $\delta$
+
+The following table summarizes the type 1 error rate at a nominal level of 0.05. In general, no inflation of type 1 error rate is observed at desired significance level, either by Chan's exact method [@chan1998exact] or Farrington and Manning's method [@farrington1990test]. Column 1 and 2 are the hypothesized ADA rate for treatment T and R, respectively. Column 3 and Colum 4 are type 1 error rates calculated using true significance level, while Column 5 and 6 are those calculated using nominal significance level 0.05.
+```{r}
+
+ty1_rate_setup1 <- table_summary(er1)
+names(ty1_rate_setup1) <- row_names
+kable(ty1_rate_setup1)
+```
+
+Next we present the quantile-quantile (QQ) plot for the simulated p-values. In the QQ plot, the vertical axis corresponds to the emperical $p$-values and the horizontal axis corresponds to quantiles from the uniform distribution between 0 and 1, which is the theoretical distribution of the $p$-values if a method is correctly calibrated. **For any given setting, a curve that closely follows the diagonal line indicates a method that is well calibrated. A curve that falls consistently below the diagonal line indicates a method that has inflated type 1 error, whereas a curve consistently above the diagonal line indicates conservative type 1 error control**.
+
+These two figures show that neither Chan's exact method or FM test is producing inflated type 1 error.
+
+```{r, fig.height =4 , fig.width=6, fig.cap = "Type 1 error simulation: Group 1"}
+
+er1 <- er1 %>% mutate(pt_true =(as.factor(pt_true))) %>% 
+              filter(pt_true %in% seq(0.11, 0.20, by = 0.03))
+
+ggplot(data = er1) + 
+              stat_qq(aes(sample = pval_exact, color = pt_true,linetype  = pt_true), 
+                          distribution = qunif, size = 1, geom= "line") + 
+                     geom_abline(slope = 1, intercept = 0) + 
+      labs(y = "calculated p values", title = "QQ plot of the p values (Chan's exact method)", 
+           subtitle = "ADA+(T) - ADA+(R) = 0.1") +
+  theme(legend.position = "top") + 
+  guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+
+ggplot(data = er1) + 
+  stat_qq(aes(sample = pval_norm_apr, color = pt_true, 
+              linetype  = pt_true), 
+          distribution = qunif, size = 1, geom= "line") + 
+  geom_abline(slope = 1, intercept = 0) + 
+  labs(y = "calculated p values", title = "QQ plot of the p values (normal approximation)",
+       subtitle = "ADA+(T) - ADA+(R) = 0.1") +
+  theme(legend.position = "top") + 
+  guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+
+```
+
+
+### Group 2: fixed ADA+ rate for treatment R
+As a further exploration, we evaluate type 1 error with fixed $p_r$ while increasing $p_t$ (stronger null).
+In this simulation, less type 1 error should be observed as the null gets stronger (larger $p_t$).
+
+
+The following table reports type 1 error rate evaluated at nominal significance level 0.05.
+```{r}
+
+ty1_rate_setup2 <- table_summary(er2)
+names(ty1_rate_setup2) <- row_names
+kable(ty1_rate_setup2)
+
+
+```
+
+The QQ plots below coincide with what is to be expected: more larger $p$-values are observed as the null becomes stronger. 
+
+```{r, fig.height =4 , fig.width=6, fig.cap = "Type 1 error simulation: Group 2"}
+
+
+er2 <- er2 %>% mutate(pt_true =(as.factor(pt_true))) %>% 
+              filter(pt_true %in% seq(0.11, 0.20, by = 0.03))
+
+ggplot(data = er2 %>% mutate(pt_true =(as.factor(pt_true)))) + 
+              stat_qq(aes(sample = pval_exact, color = pt_true, 
+                                 linetype  = pt_true), 
+                             distribution = qunif, size = 1, geom= "line") + 
+                     geom_abline(slope = 1, intercept = 0) + 
+      labs(y = "calculated p values", title = "QQ plot of the p values (Chan's exact method)", 
+           subtitle = "ADA+(R) = 0.04")+
+  theme(legend.position = "top") + 
+  guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+
+ggplot(data = er2 %>% mutate(pt_true =(as.factor(pt_true)))) + 
+  stat_qq(aes(sample = pval_norm_apr, color = pt_true, 
+              linetype  = pt_true), 
+          distribution = qunif, size = 1, geom= "line") + 
+  geom_abline(slope = 1, intercept = 0) + 
+  labs(y = "calculated p values", title = "QQ plot of the p values (normal approximation)",
+       subtitle = "ADA+(R) = 0.04")+
+  theme(legend.position = "top") + 
+  guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+ 
+```
+
+## Power simulation
+The power for non-inferiority test is simulated according to configuration in Table 3, where we keep $p_r$ fixed as 0.04 and increase $p_t$ from 0.01 to 0.1 (from strong alternative to weaker alternative).
+
+
+Figure below presents the statistical power of different simulation settings. Not surprisingly, the power decreases as $p_t$ increases (i.e., the alternative becomes weaker).  We note that the power reaches 0.8 when $p_t=p_r$, upon which assumption the sample size is calculated. 
+
+
+```{r, fig.height =4 , fig.width=6, fig.cap="Power simulation"}
+pwr_rate_setup1 <- table_summary(pwr1)
+
+
+t1 <- pwr_rate_setup1 %>% 
+      gather(key = type, value = power, -pt_true, -pr_true)
+
+t1 <- t1 %>% mutate(type = replace(type, type == "r_exact_exact_level", "exact(Chan)"), 
+                   type = replace(type, type == "r_exact_nominal_level", "exact(FM)"),
+                   type = replace(type, type == "r_norm_exact_level", "nominal(Chan)"),
+                   type = replace(type, type == "r_norm_nominal_level", "nominal(FM)"))
+
+ggplot(t1, aes(x = pt_true, y = power)) + 
+  geom_line(aes(color = type, linetype = type))  + geom_point(aes(color = type)) + 
+  labs(x = "true ADA+ rate in test group", title = "simulated power", 
+       subtitle = "ADA+ rate for reference group =  0.04") + 
+      scale_x_continuous(breaks = seq(0.01, 0.1, 0.01)) +
+  theme(legend.position = "top") + 
+  guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+
+```
+
+The following table summarizes the power for different simulation setup at nominal significance level 0.05.
+
+```{r}
+
+names(pwr_rate_setup1) <- row_names
+kable(pwr_rate_setup1)
+
+```
+
+
+# Conclusion
+
+**The proposed experimental design and sample size calculation does not lead to inflated type 1 error rate, and the statistical test to be performed has the desired power to support a conclusion in terms of non-inferiority.** 
+
+
