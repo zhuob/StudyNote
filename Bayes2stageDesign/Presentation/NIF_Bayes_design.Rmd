@@ -1,0 +1,495 @@
+---
+title: <span style="color:mediumvioletred">A Biosimilar  case study of experimental design for test of non-inferiority <br> <br>  <br>  </span>   
+author: 
+  - Bin Zhuo and Peng Chai
+  - Biostatistician @ Celerion Inc.  <br> 
+date: "November 15, 2016"
+output:
+  revealjs::revealjs_presentation:
+    theme: blood
+    css: custom.css 
+    highlight: pygments
+    self_contained: false
+    reveal_options:
+      slideNumber: 'c/t'
+      previewLinks: true
+    incremental: true
+    includes:
+      in_header: test2.html
+---
+
+```{r setup, include=FALSE}
+ knitr::opts_chunk$set(echo = FALSE, fig.height=4.6, fig.width=9.5)  # set options for all chunks
+```
+
+```{r, echo = FALSE, message=FALSE}
+options(warn =-1)
+library(ggplot2)
+library(grid)
+library(dplyr)
+library(knitr)
+```
+
+
+
+##  <span style= "font-size: 50px"> Background  </span>
+
+* Therapeutic proteins (sometimes also called biologics) have the potential to include immunogenicity.
+* The consequences of product immunogenicity vary from no evidence of clinical effect to severe, life-threatening responses.
+* Anti-dury antiboides (ADA) have been implicated in treatment failures (loss of efficacy)
+* ADA is a medical concern in terms of safety and long-term efficacy of the drug.
+
+
+## <span style= "font-size: 50px">Motivation of this study </span>
+
+* Client has developed a new drug (which we call T), supposed to be biosimilar of the reference drug already available in the market (we call it R).
+* Client wants to show that the ADA incidence (positive ADA, or ADA+) rate $p_t$ ($0 \leq p_t \le 1$) caused by T is not inferior to ADA+ rate $p_r$ caused by R. 
++ In statistical language, it means 
+  \begin{equation}
+   H_0: p_t - p_r \geq \delta~~~  VS~~~~~ H_1: p_t - p_r < \delta
+  \end{equation}
+  where $\delta$ is pre-specified by FDA in this study as 0.1 or 10%.
+
+
+
+## <span style= "font-size: 50px"> Client's question  </span>
+
++ What kind of experimental design should be used?
++ How many subjects should be enrolled in the study to ensure a valid conclusion (e.g., 80% power) of non-inferiority?
+
+
+## <span style= "font-size: 50px"> FDA guidance  </span>
+
++ FDA's concern is that the reference drug R may have high ADA+ rate. They also assume that the test drug T has high ADA+ rate.
++ FDA require the client to optimize the sample size of the study to balance the need for information on immunogenicity and the risks to study subjects.
++ FDA ask the client to provide the design of the study and the operational characteristics of the design if they choose an adaptive design (frequentist or Bayesian) approach.
+
+## <span style= "font-size: 50px"> The proposed experimental design  </span>
++ A parallel design (instead of a crossover design) was chosen because subjects will only be involved in one study drug which allows better comparison of ADA+ rates.
++ Following FDA guidance of adaptive design, the client's statistician came up with a Bayesian Beta-binomial model (BBBM)[REF]
+    + This is a two stage design and the initial sample size needed be determined before Stage 1.
+    + 50% of the subjects will be enrolled in Stage 1 experiment whose outcome will be used to re-estimate the sample size needed in Stage 2. 
+    + Complete the experiment after Stage 2 experiment is finished.
+
+## <span style= "font-size: 50px"> The Bayes Beta-binomial model  </span>
+
+   + the total number of ADA+ subjects in Stage 1 is assumed to follow a binomial distribution $S_1 \sim Bin(n, \theta)$. 
+   + The outcome of Stage 1 remains blinded in the sense that only $s_1$ is available to us, and no treatment information is available (to reduce bias).
+   + In Bayesian framework, the parameter of interest $\theta$ is assumed to follow a Beta distribution, i.e., $\theta \sim Beta(\alpha, \beta)$.
+   + Following Bayes rule, the posterior distribution of $\theta$ is $\theta | S_1, n, \alpha, \beta \sim Beta(\alpha + s_1, \beta + n- s_1)$
+   + The posterior mean of $\theta$ is used to re-estimate the sample size needed in Stage 2.
+
+## <span style= "font-size: 50px"> The BBBM </span>
+
+   + How to determine $n$ for Stage 1?
+     * Orignially, study shows that $p_r$ is less than 1% (only 4 out of 521 subjects were detected ADA+). 
+     * the initial sample size 92 is calculated based on assumption $p_t = p_r = 0.01$. 
+     * Therefore $n= 92\times 50\% =46$ for Stage 1.
+   + How to choose an appropriate prior?
+     * the client statistician set $\alpha = 1, \beta= 100$ so that the mean of this prior is about 1%.
+
+
+
+## <span style= "font-size: 50px"> FDA commented further on BBBM </span>
+
+* The prior is too strong and Stage 2 sample size may be severely under-estimated.
+    +  A new technology (bioassay) has been introduced to detect ADA+. As a result, $p_r$ is expected to be higher than the commonly believed 1%.
+* Such a design appears OK, but no literature is availabe to support its operational characteristics (type 1 error and power).
+* Please provide type 1 error control strategy or demonstrate the magnitude of type 1 error rate inflation is negligible (e.g., < 0.001) by simulation or alternative method.
+* Please demonstrate the power is achievable for such a design.
+
+
+## <span style= "font-size: 50px">  </span>
+Their statistician left the company!!!
+<img src="broken-001.jpg" style="background-color:transparent; border:0px; box-shadow:none; width:700px;height:400px"></img>
+
+
+
+
+## <span style= "font-size: 50px"> <img src="Challenge.arrow_.jpg" style="background-color:transparent; border:0px; box-shadow:none; width:300px;height:100px "></img>  </span>
+
+
++ Biosimilar study is new in pharmaceutical industry: we have very limited experience in this type of study.  
++ New research topic: FDA admits that no existing literature is available for the specific problem in this study.
++ No guaranteed favorable results: what if this BBBM fails in terms of operational characteristics?
++ tight timeline: the client needs to re-submit the proposal to FDA within 4 weeks.
+
+
+
+## <span style= "font-size: 50px"> Approaches </span>
+
++ Step 1: Reviewing literature (2 weeks planned, completed in 6 days )
+    + to understand the theory behind non-inferiority test on two proportions.
+        + Chan's exact method (key)
+        + Farrington-Manning (FM) method (important)
+    + to understand how adaptive design works.
+    + to learn what strategy is commonly used to demonstrate the operational characteristics.
+    + to learn what answers (to FDA comments) are to be expected 
+    
+## <span style= "font-size: 50px"> Approaches </span>
++ Step 2: Approaching problem (1 week planned, 4 days used)
+    + choose a weaker prior to re-estimate the sample size (easy)
+    + run simulation to explore type 1 error and power (hard)
+        + code from scracth to implement non-inferiority test (both Chan's exact and FM method).
+        + verify the code by reproducing the results in the referenced paper.
+        + Set up the simulation (e.g., parameter configuration, simulation pipeline, ect.) 
+        + conduct simulation to evaluate the operational characteristics.
+
+## <span style= "font-size: 50px"> Approaches </span>
++ Step 3: submitting study protocol to authority (1 week planned, 1 week used.)
+    + help client revise the study protocol.
+    + help client design and revise the interim analysis plan.
+    + write simulation summary report to support the planned experimental design.
+
+
+## <span style= "font-size: 50px"> Our answer to FDA comments </span>
++ choose Jefferys prior (a non-informative prior that is invariant to reparameterization) to re-estimate the sample size.
++ simulate and analyze 30,000 experiments to demonstrate that
+    + the type 1 error is well-calibrated.
+    + this adaptive design has the power to support a conclusion of non-inferiority.
+
+
+## <span style= "font-size: 50px"> Priors and resulting posteriors </span>
+```{r, fig.height=6, fig.width=9, fig.retina=2}
+library(dplyr)
+
+dens <- function(x, n, p){
+  prob <- dbeta(p, shape1 = x + 1/2, shape2 = n - x + 1/2)
+  data <- data.frame(p = p, density = prob)
+  return(data)
+}
+ p <- seq(0.001, 0.99, by = 0.001)    # 
+  prior <- 1/pi*p^(-0.5)*(1-p)^(-0.5)
+  dat <-  data.frame(p = p, density = prior, case = "Jefferys Prior") 
+    p1 <- dens(x = 3, n = 46, p = p) %>% mutate(case = "Posterior Est from the Interim Rate = 3/46 (Jeffreys Prior)")
+
+dens2 <- function(x, n, p){
+  prob <- dbeta(p, shape1 = x + 1, shape2 = n - x + 100)
+  data <- data.frame(p = p, density = prob)
+  return(data)
+}  
+
+client_prior <- dens2(0, 0, p) %>% mutate(case = " Client's initial prior")  
+p2 <- dens2(x = 3, n = 46, p = p) %>% mutate(case = " Posterior Est from the Interim Rate = 3/46 (Strong prior)")
+  
+
+  den <- bind_rows(dat, p1, client_prior, p2)
+  
+library(ggplot2)
+  
+  ggplot(data = den, aes(x = p, y = density)) + geom_line(aes(color = case)) + 
+      facet_wrap(~case, scales = "free") + 
+      theme(legend.position = "none")
+  
+  
+
+```
+
+
+```{r, echo=FALSE}
+source("H:/Projects/CA20737/protocol_revision/FM_score.R")
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
+```
+
+
+
+<!-- ## Reproducing Figure 1 -->
+<!-- ```{r, fig.height =4 , fig.width=6, fig.cap = "True levels of the test of equivalence at the 0.05 nominal level based on normal approximation using the constrained ML estimate of the variance"} -->
+<!-- size <- 1:100 -->
+<!-- alpha1 <- alpha2 <- alpha3 <- c() -->
+
+<!-- for (i in 1: length(size)){ -->
+<!--   alpha1[i] <- true_alpha_normal_app(alpha = 0.05, n1 = size[i], n2 =size[i], delta = 0, p2 = 0.95) -->
+<!--   alpha2[i] <- true_alpha_normal_app(alpha = 0.05, n1 = size[i], n2 =size[i], delta = 0.2, p2 = 0.5) -->
+<!--   alpha3[i] <- true_alpha_exact(n1 = size[i], n2 = size[i], delta = 0.2, p2 = 0.50, alpha = 0.05) -->
+<!-- } -->
+
+<!-- result <- data.frame(nsize = c(size, size), true_level = c(alpha1, alpha2), -->
+<!--                      test = rep(c("P1 = 0.95, delta = 0", -->
+<!--                       "P1 = 0.70, delta = 0.2"), each = length(size))) %>% -->
+<!--                  filter(!is.na(true_level)) -->
+
+
+<!-- ggplot(data = result, aes(x = nsize, y = true_level)) + -->
+<!--   geom_line(aes(color = test, linetype = test)) + -->
+<!--   geom_hline(yintercept = 0.05) + ylim(0, 0.1) + -->
+<!--   theme(legend.position = c(.8, 0.75))  -->
+
+<!-- ``` -->
+
+
+
+<!-- ## Reproducing Figure 2 -->
+<!-- ```{r, fig.height =4 , fig.width=6, fig.cap = "True levels of the test of equivalence at the 0.05 nominal level given P1 = 0.7 and delta = 0.2"} -->
+
+<!-- result <- data.frame(nsize = c(size, size), true_level = c(alpha2, alpha3), -->
+<!--           test = rep(c("Normal Approximation", "Exact Test"), each = length(size))) %>% -->
+<!--         filter(!is.na(true_level)) -->
+
+
+
+<!-- ggplot(data = result, aes(x = nsize, y = true_level)) + -->
+<!--   geom_line(aes(color = test, linetype = test)) + -->
+<!--   geom_hline(yintercept = 0.05) + ylim(0, 0.1) + -->
+<!--   theme(legend.position = c(.8, 0.75))  -->
+
+
+<!-- ``` -->
+
+
+
+## <span style= "font-size: 50px">  Reproducing numerical results in Example 1 </span>
+
++ In the first example (Chan's paper page 1410), Chan reported a $p$-value of 0.0017 which occurred at $P=0.441$. We report
+```{r}
+p2_search <- seq(0.001, 0.900, by = 0.001)
+result <- tail_prob(69, 83, 76, 88, delta = 0.1, p2_search = p2_search)
+result %>% filter(p_exact == max(p_exact))
+```
+
+
+## <span style= "font-size: 50px">  Simulation setup </span> 
+
+  | Treatment |          Stage 1|     Stage 2      |  Overall |
+  |-------|-------------|------------|-----------|  
+  |T    |  $X_1\sim Bin(n_1,p_t)$ | $X_2\sim Bin(n_1,p_t)$ | $X \sim Bin(n_1 + n_2, p_t)$ |
+  |R    | $Y_1\sim Bin(n_1, p_r)$ | $Y_2\sim Bin(n_1, p_r)$ | $Y\sim Bin(n_1 + n_2, p_r)$|
+
+  + Set a starting sample size $n_1$ for each treatment (46/2) 
+  + initiate $p_t$ and $p_r$.
+      + if $p_t-p_r \ge 0.1$ (true null, e.g., $p_t = 0.16$ and $p_r = 0.02$) $\longrightarrow$ type 1 error simulation
+      + if $p_t-p_r < 0.1$ (true alternative, e.g., $p_t = 0.04$ and $p_r = 0.07$) $\longrightarrow$ power simulation
+  + Specify the significance level $\alpha$ (0.05 in this study).
+
+  
+  
+
+## <span style= "font-size: 50px">  Simulation step </span>   
+
+  a.  In Stage 1, simulate $x_1$ from $Bin(n_1, p_t)$ for T, and $y_1$ from $Bin(n_1, p_r)$ for R.
+  b. record $s_1 = x_1 + y_1$ and calculate $n_2$ for in Stage 2.
+  c. In Stage 2, simulate $x_2$ from $Bin(n_2, p_t)$ for T, and $y_2$ from $Bin(n_2, p_r)$ for R.
+  d. Unblind the data, conduct non-inferiority test and obtain $p$-value. 
+  
+|Treatment| Stage 1   |  Stage 2 |  Total ADA+ | Total subjects |
+|---------|-----------|----------|-------------|----------------|
+|  T      |  $x_1$    |  $x_2$   | $x_1 + x_2$ | $n_1 + n_2$    |
+|  R      |  $y_1$    |  $y_2$   | $y_1 + y_2$ | $n_1 + n_2$    |   
+
+  e. Repeat step (1) - (4) for $K = 1000$ times, resulting in 1000 $p$-values. 
+
+## <span style= "font-size: 50px">  Evaluation of operational characteristics </span> 
+ + The resulting type 1 error rate (or power, depending on the parameter configuration) is 
+ \begin{equation}
+    \frac{\#~p~values < significance~level}{K}
+ \end{equation}
+  
+  
+## <span style= "font-size: 50px">  Simulation parameter configuration </span> 
+  
+  
+Table: Type 1 error simulation with fixed margin $\delta$.
+
+| $\delta$ | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 |
+| -------- | -----| -----| -----| -----| -----| -----| -----| -----| -----| -----|
+| $p_t$    | 0.11 | 0.12 | 0.13 | 0.14 | 0.15 | 0.16 | 0.17 | 0.18 | 0.19 | 0.20 |
+| $p_r$    | 0.01 | 0.02 | 0.03 | 0.04 | 0.05 | 0.06 | 0.07 | 0.08 | 0.09 | 0.10 |
+
+Table: Type 1 error simulation with fixed $p_r$.
+
+| $\delta$ | 0.10 | 0.11 | 0.12 | 0.13 | 0.14 | 0.15 | 0.16 | 0.17 | 0.18 | 0.19 | 0.20 |
+| -------- | -----| -----| -----| -----| -----| -----| -----| -----| -----| -----| -----|
+| $p_t$    | 0.14 | 0.15 | 0.16 | 0.17 | 0.18 | 0.19 | 0.20 | 0.21 | 0.22 | 0.23 | 0.24 |
+| $p_r$    | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 |
+
+Table: Power simulation with fixed $p_r$.
+
+| $\delta$ |-0.03 |-0.02 |-0.01 | 0.00 | 0.01 | 0.02 | 0.03 | 0.04 | 0.05 | 0.06 |
+| -------- | -----| -----| -----| -----| -----| -----| -----| -----| -----| -----|
+| $p_t$    | 0.01 | 0.02 | 0.03 | 0.04 | 0.05 | 0.06 | 0.07 | 0.08 | 0.09 | 0.10 |
+| $p_r$    | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 |
+  
+
+
+## <span style= "font-size: 50px">  Simulation output </span> 
+
+Table: Variable specification of the simulated data set
+
+  |Variable     | Origin     | Description                                                      | 
+  |-------------|------------| ---------------------------------------------------------------- | 
+  |n_per_arm    |calculated  | total number of subjects needed for each treatment .             |
+  | $n_1$|pre-specified  | number of subjects enrolled in Cohort 1.|
+  | $n_2$|calculated  | additional number of subjects enrolled.
+  | $x_1$| simulated |number of ADA+ subjects in Cohort 1 in treatment group (T). 
+  | $x_2$| simulated | number of ADA+ subjects out of the remaining subjects in treatment group (T).
+  | $y_1$| simulated | number of ADA+ subjects in Cohort 1 in reference group (R).
+  | $y_2$| simulated | number of ADA+ subjects out of the remaining subjects in reference group (R).
+  | pval_exact| calculated | the p value calcluated using Chan's exact method [@chan1998exact].
+  | alpha_exact|calculated  | the (calibrated) true significance level calculated using Chan's exact method.
+  | pval_norm_apr|calculated  | the p value calculated using Farrington-Manning [@farrington1990test] statistics (normal approximation)
+  | alpha_norm|calculated  | the (calibrated) true significance level calculated using Chan's exact method based on FM statistics.
+  | pt_true|pre-specified | true ADA+ probability in T.
+  | pr_true|pre-specified | true ADA+ probability in R.
+  | alpha_nominal|pre-specified  | the nominal significance level, set to be 0.05 acorss all simulations.
+  
+  
+  
+ 
+## <span style= "font-size: 50px">  Output data </span> 
+
+```{r, echo = FALSE}
+## type 1 error simulation
+er2 <- read.csv("H:/Projects/CA20737/protocol_revision/Simu_results/type1error_setup1.csv", header =T)
+er1 <- read.csv("H:/Projects/CA20737/protocol_revision/Simu_results/type1error_setup2.csv", header =T)
+pwr1 <- read.csv("H:/Projects/CA20737/protocol_revision/Simu_results/power_setup1.csv", header =T)
+
+
+table_summary <- function(data){
+  result <- data %>% group_by(pt_true, pr_true) %>%
+                summarize(r_exact_exact_level = mean(pval_exact <= alpha_exact), 
+                          r_norm_exact_level  = mean(pval_norm_apr <= alpha_norm),
+                          r_exact_nominal_level = mean(pval_exact <= alpha_nominal), 
+                          r_norm_nominal_level = mean(pval_norm_apr <= alpha_nominal)) 
+    
+  return(result)
+  }
+
+row_names <- c("ADA(T)", "ADA(R)", "exact(Chan)", "exact(FM)", "nominal(Chan)", "nominal(FM)")
+
+head(er1, 10)
+```
+  
+  
+## <span style= "font-size: 50px"> Simulation result: type 1 error (Group 1)  </span> 
+```{r}
+
+ty1_rate_setup1 <- table_summary(er1)
+names(ty1_rate_setup1) <- row_names
+kable(ty1_rate_setup1)
+```
+  
+  
+## <span style= "font-size: 50px">  </span> 
+```{r, fig.height =6, fig.width=8, fig.cap = "Type 1 error simulation: Group 1"}
+
+er1 <- er1 %>% mutate(pt_true =(as.factor(pt_true))) %>% 
+              filter(pt_true %in% seq(0.11, 0.20, by = 0.03))
+
+ggplot(data = er1) +
+              stat_qq(aes(sample = pval_exact, color = pt_true,linetype  = pt_true),
+                          distribution = qunif, size = 1, geom= "line") +
+                     geom_abline(slope = 1, intercept = 0) +
+      labs(y = "calculated p values", title = "QQ plot of the p values (Chan's exact method)",
+           subtitle = "ADA+(T) - ADA+(R) = 0.1") +
+  theme(legend.position = "top") +
+  guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+
+# ggplot(data = er1) +
+#   stat_qq(aes(sample = pval_norm_apr, color = pt_true,
+#               linetype  = pt_true),
+#           distribution = qunif, size = 1, geom= "line") +
+#   geom_abline(slope = 1, intercept = 0) +
+#   labs(y = "calculated p values", title = "QQ plot of the p values (normal approximation)",
+#        subtitle = "ADA+(T) - ADA+(R) = 0.1") +
+#   theme(legend.position = "top") +
+#   guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+
+```
+
+
+
+## <span style= "font-size: 50px"> Simulation result: type 1 error (Group 2)  </span> 
+
+
+```{r}
+cat("Type 1 error rate evaluated at nominal significance level 0.05.")
+ty1_rate_setup2 <- table_summary(er2)
+names(ty1_rate_setup2) <- row_names
+kable(ty1_rate_setup2)
+
+
+```
+
+## <span style= "font-size: 50px">  </span> 
+```{r, fig.height =6 , fig.width=8, fig.cap = "Type 1 error simulation: Group 2"}
+
+
+er2 <- er2 %>% mutate(pt_true =(as.factor(pt_true))) %>% 
+              filter(pt_true %in% seq(0.11, 0.24, by = 0.03))
+
+ggplot(data = er2 %>% mutate(pt_true =(as.factor(pt_true)))) + 
+              stat_qq(aes(sample = pval_exact, color = pt_true, 
+                                 linetype  = pt_true), 
+                             distribution = qunif, size = 1, geom= "line") + 
+                     geom_abline(slope = 1, intercept = 0) + 
+      labs(y = "calculated p values", title = "QQ plot of the p values (Chan's exact method)", 
+           subtitle = "ADA+(R) = 0.04")+
+  theme(legend.position = "top") + 
+  guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+
+# ggplot(data = er2 %>% mutate(pt_true =(as.factor(pt_true)))) + 
+#   stat_qq(aes(sample = pval_norm_apr, color = pt_true, 
+#               linetype  = pt_true), 
+#           distribution = qunif, size = 1, geom= "line") + 
+#   geom_abline(slope = 1, intercept = 0) + 
+#   labs(y = "calculated p values", title = "QQ plot of the p values (normal approximation)",
+#        subtitle = "ADA+(R) = 0.04")+
+#   theme(legend.position = "top") + 
+#   guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+ 
+```
+
+
+
+
+
+## <span style= "font-size: 50px"> Simulation result: power </span> 
+
+
+```{r, fig.height =4 , fig.width=6, fig.cap="Power simulation"}
+pwr_rate_setup1 <- table_summary(pwr1)
+
+
+t1 <- pwr_rate_setup1 %>% 
+      gather(key = type, value = power, -pt_true, -pr_true)
+
+t1 <- t1 %>% mutate(type = replace(type, type == "r_exact_exact_level", "exact(Chan)"), 
+                   type = replace(type, type == "r_exact_nominal_level", "exact(FM)"),
+                   type = replace(type, type == "r_norm_exact_level", "nominal(Chan)"),
+                   type = replace(type, type == "r_norm_nominal_level", "nominal(FM)"))
+
+names(pwr_rate_setup1) <- row_names
+cat("The power is evaluated at nominal level 0.05\n")
+kable(pwr_rate_setup1)
+
+```
+
+## <span style= "font-size: 50px">  </span> 
+
+```{r, fig.width=8, fig.height=6}
+
+ggplot(t1, aes(x = pt_true, y = power)) + 
+  geom_line(aes(color = type, linetype = type))  + geom_point(aes(color = type)) + 
+  labs(x = "true ADA+ rate in test group", title = "simulated power", 
+       subtitle = "ADA+ rate for reference group =  0.04") + 
+      scale_x_continuous(breaks = seq(0.01, 0.1, 0.01)) +
+  theme(legend.position = "top") + 
+  guides(linetype = guide_legend(keywidth = 50, keyheight = 2))
+
+
+```
+
+
+## <span style= "font-size: 50px"> Conclusion and future work </span> 
++ **The proposed experimental design and sample size calculation does not lead to inflated type 1 error rate.**
++ **the statistical test to be performed has the desired power to support a conclusion in terms of non-inferiority.**
++ provide theoretical support for this BBBM (i.e., to justify the opreatinal characteristics of this experimental design by analytical method).
+
+
+## 
+<img src="thankyou3.png" style="background-color:transparent; border:0px; box-shadow:none; width:700px;height:350px; margin: 0; border: 0; padding-top: 200px; "></img>
+
+
