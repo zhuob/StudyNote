@@ -1,6 +1,8 @@
 ---
 title: "Study Notes"
 author: "Bin Zhuo, PhD, Biostatistician  \nCelerion Inc."
+header-includes:
+   - \usepackage{bm}
 #- name: "Bin Zhuo, PhD^[,  Biostatistician]"
 #- affiliation: "Celerion Inc."
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
@@ -33,12 +35,12 @@ knitr::opts_chunk$set(echo = TRUE)
 **NOTE FROM BIN (1)**: in the experiment, subjects will undergo the following steps (in order):
 
   * **_ADA screening test_**. If the screening result is *NEGATIVE*, then the result will be recoreded  *NEGATIVE*, otherwise screening *POSITIVE* and continue
-  * **_ADA confirmatory test_**. If the result is *NEGATIVE*, then the subject will have a confirmatory *NEGATIVE* result, otherwise a *POSITIVE* result with a "titer" value recorded and continue 
-  * **_ADA neutralizing test_**.  If the result is *NEGATIVE*, then the subject will have a neutralizing *NEGATIVE* result, otherwise *POSITIVE*  with a "titer" value recorded and there will be no more test. 
+  * **_ADA confirmatory test_**. If the result is *NEGATIVE*, then the subject will have a confirmatory *NEGATIVE* result, otherwise a *POSITIVE* result with a "titer" value recorded and continue
+  * **_ADA neutralizing test_**.  If the result is *NEGATIVE*, then the subject will have a neutralizing *NEGATIVE* result, otherwise *POSITIVE*  with a "titer" value recorded and there will be no more test.
 
 **NOTE FROM BIN (2)**: The cut-off value to determine whether a subject has *POSITIVE* or *NEGATIVE* ADA result may be different (per assay). Therefore, when (if needed) analyzing titer results, there should be a batch effect.
-  
-  
+
+
 ## Background
 Therapeutic proteins (sometimes also called biologics, biopharmaceuticals, biological products, or biological medicinal products) and peptides have the potential to induce immunogenicity. The consequences of product immunogenicity vary from no evidience of clinical effect to severe, life-threatening responses.
 Anti-drug antibodies (ADA) have been implicated in infusion reactions and anaphylaxis as well as immune complex-mediated disease. ADA have also caused secondary treatment failures (loss of efficacy) and, in rare occasions, more serious thrombocytopenia and pure red cell aplasia. Therefore, ADA are a medical concern in terms of safety and long-term efficacy of the drug and it is critical to evaluate their development in all patients during clinical studies, not just in a symptom-driven manner. With a goal of guiding medical practice, the elucidation of ADA responses and their characteristics relative to clinical consequences is vital [@shankar2014assessment].
@@ -60,16 +62,16 @@ results relate to clinical impact in the subject).
 The goal of this study is to compare immunogenicity of Theragrastim^&#174;^ (new drug) and Neupogen^&#174;^ (reference drug) after multiple subcutaneous (SC) administrations in healthy subjects.  ADA levels for Theragrastim&#174; and Neupogen&#174; will be estimated and compared to evaluate potential difference between the two products in the incidence of human immune responses.
 
 This is a one center, single-blind, randomized, parallel, multiple-dose, safety and
-immunogenicity study. A total number of one hundred thirty four (134) healthy adult male and female subjects will be enrolled and randomized to 1 of 2 treatments (67 subjects per treatment). 
+immunogenicity study. A total number of one hundred thirty four (134) healthy adult male and female subjects will be enrolled and randomized to 1 of 2 treatments (67 subjects per treatment).
 
 The sample size is chosen based on a target of 61 subjects per arm as calculated, to which 6 subjects (~10%) were added to each arm to account for potential dropouts. With 61 subjects per arm, the trial can show, with
 80% power, that the upper bound of the one-sided 95% confidence interval of the
 difference in ADA+ rates between the two products is below (or above) the
-non-inferiority margin (10%) 
+non-inferiority margin (10%)
 
 The power calculation for sample size is based on the following assumptions:
 
-  * The ADA+ rate of Neupogen^&#174;^ is 3.3% 
+  * The ADA+ rate of Neupogen^&#174;^ is 3.3%
   * The ADA+ rate of Theragrastim^&#174;^ is 3.3%
   + The mean ADA+ rate difference ($\delta$) between the two products is zero;
   + The NI margin ($\delta_0$) is 10%.
@@ -77,8 +79,8 @@ The power calculation for sample size is based on the following assumptions:
 The power calculation is based on exact method [@chan1999test] using $\delta$-projected $Z$-statistic (i.e., the score statistic) with REML estimation procedure [@miettinen1985comparative].
 
 ## Statistical Analysis
-The rate (or proportion) of subjects that have ADA+ in confimatory test and neutralizing test (if needed) will be compared between Theragrastim^&#174;^ and 
-Neupogen^&#174;^ treatments to determine if any differences are statistically meaningful. 
+The rate (or proportion) of subjects that have ADA+ in confimatory test and neutralizing test (if needed) will be compared between Theragrastim^&#174;^ and
+Neupogen^&#174;^ treatments to determine if any differences are statistically meaningful.
 
 
 ### Statistical method
@@ -88,18 +90,18 @@ The rate difference between Theragrastim^&#174;^ and Neupogen^&#174;^ will be de
 \begin{equation}\label{eq:adadiff}
 \delta = \pi_1 -\pi_2
 \end{equation}
-where $\pi_1$ is the ADA+ rate of Theragrastim^&#174;^ and  $\pi_2$ is that of Neupogen^&#174;^. 
+where $\pi_1$ is the ADA+ rate of Theragrastim^&#174;^ and  $\pi_2$ is that of Neupogen^&#174;^.
 
 In hypotheses testing, the research or alternative hypothesis
 represents what the study aims to show. The null hypothesis is the
 opposite of the research hypothesis and is what the investigator
-hopes to disprove [@walker2011understanding]. Therefore, the primary statistical hypothesis for the clinical trial will be tested using 
+hopes to disprove [@walker2011understanding]. Therefore, the primary statistical hypothesis for the clinical trial will be tested using
 \begin{equation}\label{eq:immunetest}
 H_0: \pi_1 - \pi_2 \geq 0.10~~~  VS~~~~~ H_1: \pi_1 - \pi_2 < 0.1
 \end{equation}
-Confidence intervals (CIs) will be calculated using the Farrington-Manning method ($\delta$-projected $Z$-statistic) recommended by @chan1999test. 
+Confidence intervals (CIs) will be calculated using the Farrington-Manning method ($\delta$-projected $Z$-statistic) recommended by @chan1999test.
 
-Note that in SAS, the null in Expression (\ref{eq:immunetest}) is equivalently stated as 
+Note that in SAS, the null in Expression (\ref{eq:immunetest}) is equivalently stated as
 \begin{equation}\label{eq:immunetest2}
 H_0: \pi_2 - \pi_1 \leq -0.10~~~  VS~~~~~ H_1: \pi_2 - \pi_1 > -0.1
 \end{equation}
@@ -146,6 +148,430 @@ datalines;
     ;
 Run;
 \end{verbatim}
+
+
+# Concentration, QTc and Exposure-Response(ER) analysis
+
+## Background
+
+The International Conference on Harmonization (ICH) E14 guidance requires that all new drugs with systemic bioavailability be studied for their off-target effect on cardiac repoloarization by a 'thorough QT/QTc' (TQT) study. With experience on exposure-response modelling on data from many of these TQT studies, results obtained from concentration-QTc analysis are gaining as much acceptance as findings from by-time analysis of the placebo-adjusted change from baseline in the QTc interval after administration of a study drug [@panicker2016detecting].
+
+Given the high cost of performing a TQT study, which is usually done late in phase II of clinical drug development, there has been a move towards performing intensive ECG analysis in single ascending dose (SAD) studies. While the sample size in these early-phase studies is statistically underpowered to demonstrate a placebo-adjusted change in mean QTc as described in the ICH E14 guidance, on could arguably obtain the same information by exposure-response modelling on early-phase data [@salvi2010update].
+
+## Summary comparison between TQT and C-QT study
+
+|                 |TQT               | C-QT
+|-----------------|------------------|-------------------
+|Number of doses  |        At least 1 (the supratherapeutic dose) if you do not expect QT effect. However, standardly there is 2 (therapeutic and supratherapeutic doses)         | At least 3 dose levels to have a adequate range of concentrations to evaluate the concentration-response of the drug |
+|-----------------|------------------|-------------------
+|Highest Dose | Supratherapeutic dose corresponding to concentrations expected following worst case scenario in a clinical setting  (i.e., renal/hepatic impairment affecting drug metabolism and/or elimination or following a DDI) |Dose level that will produce concentrations expected after 2 time your worst case scenario in a clinical setting  (i.e., renal/hepatic impairment affecting drug metabolism and/or elimination or following  DDI)|
+|-----------------|------------------|-------------------
+|Positive Control (Moxifloxacin)|Always to assess assay sensitivity (Moxi plasma samples are collected to keep the study blinded and in case sponsor needs to analyze them. But samples are no required to be assay) |If you can reach 2 time your worst case scenario, a positive control is not required. If 2 time your worst case scenario  is not achievable, than you need a positive control (Moxi plasma samples are collected  and analyzed , in this case, since concentrations will be used in the C-QT analyses)
+| -------------- |------------------|-------------------
+|Study Design|4-way Xover (for drugs that show no accumulation of the parent or metabolites) N = 48 Parallel / Parallel with nested Xover (for long half-life drugs or those showing accumulation) N = 240/180|Single Ascending dose (N = 9/Cohort; 6 active - 3 placebo) Xover (N = 9; 6 active - 3 placebo) Parallel (N = 9/Group; 6 active - 3 placebo) If Moxi is added, 5 subjects will be added (1 placebo [to balance the placebo:moxi ratio] and 4 moxi per group/cohort. However need power calculation to confirm that sample size is sufficient to show assay sensitivity.)
+|-----------------|------------------|-------------------
+|Primary analysis|A mixed effect analysis of covariance (ANCOVA) is used to analyze $\Delta$QTcF at each time point post baseline.|Explained below.
+
+Table: comparison between TQT and C-QT.
+
+## Statistical Analysis of C-QT data
+
+The exposure-response analysis is usually performed with linear mixed models.
+
+\begin{equation}\label{eq:er_model}
+ \Delta QTc_{ijk} = (\mu + \text{TRT}_{j} + t_k  + \eta_{\mu, i}) + \theta_0(B_{QTc, i} - \bar{B}) + (\theta_1 + \eta_{c, i})C_{ijk} + \epsilon_{ijk}
+\end{equation}
+
+**Fixed term**: In Equation (\ref{eq:er_model}), $\Delta QTc_{ijk}$ is the change from baseline QTc for subject $i$ of treatment $j$ at time $k$, $\mu$ is the overall mean, $TRT_{j}$ is the effect of treatment $j$, $t_k$ is the effect at time $j$ (treated as categorical). The term $B_{QTc, i}$ and  $\bar{B}$ represent the baseline QTc value for subject $i$ and overall mean of baseline QTc, respectively. The $C_{ijk}$ is the drug concentration level for subject $i$ of treatment $j$ at time $k$. Note for placebo group, $C_{ijk}$ is set to be 0 in the model.
+
+**Random term**: $\eta_{\mu, i}$ is the random intercept, $\eta_{c, i}$ is the random slope for concentration, and $\epsilon_{ijk}$ is the error term. In the data analysis step, the covariance structures for both $\eta$ and $\epsilon$ need to be specified.
+
+**This is based on my own understanding**: the random effects has the following distribution
+\begin{equation}\label{eq:er_random}
+\bm \eta  = (\eta_{\mu, i}, \eta_{c, i})' \sim N(\bm 0, \bm G), ~~~~\bm\epsilon_{ij} \sim N(\bm 0, \bm \Sigma)
+\end{equation}
+where $\bm G$ is a $2\times 2$ covariance matrix, and $\bm \Sigma$ is an $K\times K$ covariance matrix and $K$ is the number of time points for each subject.
+
+
+## Result evaluation
+
+
+The study will be considered as positive (i.e., it could detect the moxifloxacin-induced QT prolongation) for an experiment if both of the following criteria are satisfied (copied from [@panicker2016detecting] and needs to be confirmed within each study)
+
+  + the plasma concentration-$\Delta\Delta$QTcF relationship showed a statistically significant ($P$ < 0.05) positive slope, and
+  + the upper bound of the 90% two-sided confidence limit of the $\Delta\Delta$QTcF at geometric mean $C_{max}$ for the experiment exceeds 10 ms.
+
+## Sample size evaluation using boostrap - A real case study
+There is a Merck study (project number: CA15451) conducted at our site. This is an open-label, multiple-dose, randomized, 3-cohort, placebo-and active-controlled, parallel study in 54 healthy adult subjects under fasting conditions. For the purpose of detecting Moxifloxacin effect, we'll only include Cohort 2 (placebo) and Cohort 3 (Moxi) in the data analysis part.
+
+  + **Cohort 2**: Eighteen (18) subjects will receive placebo to match treatment and study procedures on Day 10 and 20 of Cohorts 1 and 3. Cardiodynamic and pharmacokinetic samples will be collected up to 24 hours following dosing on Days 10 and 20.
+  + **Cohort 3**: Eighteen (18) subjects will receive an oral dose of 400 mg of moxifloxacin on Day 10 and an oral dose of 800 moxifloxacin on Day 20. Subjects will also receive placebo for mirtazapine (study drug) to match the treatment and study procedures on Days 10 and 20 of Cohorts 1 and 2. Cardiodynamic and pharmacokinetic samples will be collected up to 24 hours following dosing on Days 10 and 20.
+
+### Data cleaning
+  + *Plasma concentration*: can be obtained from `pla2.sas7bdat`. For placebo group (Cohort 2), the concentration level is set to be 0 since there's no drug.
+  + *QTcF*: can be obtained from `ecg_core_lab.sas7bdat`. $\Delta$QTcF is calculated as change from time-matched baseline of the average QTcF for each subject.
+
+After data cleaning, the first few lines of the final data looks like
+```{r}
+final <- read.csv("H:/Projects/CA22282/Data/final.csv", header = T)
+head(final)
+```
+The `BQTcF` is the overall baseline, one for each subject, and `meanB` is the overall baseline for all subjects. They correspond to  $B_{QTc, i}$ and $\bar{B}$ in Equation (\ref{eq:er_model}), respectively.
+
+### Detection of Moxifloxacin effect
+In this section, we first implement the model described in Equation (\ref{eq:er_model}), and then calculate the lower bound of the 90% two-sided CI of the $\Delta\Delta QTcF$ at geometric mean $C_{max}$. If the 90% lower CI is greater than 5, and the slope for the concentration is significantly positive ($P< 0.05$), then the ability to detect moxifloxacin effect can be established.
+
+
+```{r, message=FALSE}
+
+library(dplyr)
+library(haven)
+library(tidyr)
+library(lme4)
+
+
+calculate_ci <- function(obj, data){
+
+  result <- obj
+
+  coef_est <- result$coefficients
+  # the estimate and std for treatment difference, Moxi - placebo
+  mu1 <- coef_est[rownames(coef_est)=="treatMoxi"]
+
+  # the estimate for log concentration level
+  conc_est <- coef_est[rownames(coef_est) %in% c("lgconc", "conc_um")]
+  logc <- conc_est[c(1, 3)]
+  # the estimated covariance matrix
+  cov_est <- result$vcov
+  #  of the repeated measurements
+  rep_cov <- cov_est[1:8, 1:8]
+  # the estimated covariance between lgconc and treatment
+  cov2 <- cov_est[rownames(cov_est) %in% c("lgconc", "conc_um"), colnames(cov_est)=="treatMoxi"]
+
+  # get the cmax_mean for each data
+  conc <- ana_data %>% filter(treat == "Moxi") %>%
+                    group_by(ptno) %>% mutate(cmax = max(conc)) %>%
+                    ungroup() %>% select(cmax) %>% distinct() %>% t()
+
+    cmax_mean <- log(exp(mean(log(as.vector(conc)))) + 1)
+  #cov2 <- -12.619163
+  ddqtcf_mean <- mu1[1] + conc_est[1]*cmax_mean
+  ddqtcf_se <- sqrt(mu1[2]^2 + conc_est[2]^2*cmax_mean^2 + 2*cmax_mean*cov2)
+  CI <- ddqtcf_mean + c(-1, 1)*qnorm(0.95)*ddqtcf_se
+  report <- c(logc, ddqtcf_mean, CI)
+  names(report) <- c("Moxi_slope", "t_value", "est.", "lower 90%", "upper90%")
+  report
+
+}
+
+ana_data <- final %>% mutate(lgconc = log(conc + 1),
+                            # scaleconc = scale(conc, center = F),
+                             conc_um = conc/1000,
+                             dBQTcF = BQTcF - meanB,
+                             treat = factor(treat, levels = c("Placebo", "Moxi")),
+                             P_HOUR = as.factor(P_HOUR))
+
+
+ mod <- lmer(data = ana_data, changeQTcF ~ (P_HOUR-1)  + treat +
+                   dBQTcF + lgconc + (lgconc+1|ptno) )
+    mod <- summary(mod)
+    result <- calculate_ci(mod, ana_data)
+  result
+```
+
+The result here shows that the estimated slope for concentration is 5.4 with t-value of 3.62. Also, at $C_{max}$, the 90% lower CI is 7.79, which is greater than 5. Concequently, the effect of moxifloxacin is established.
+
+### Bootstrap for power and sample size
+
+In this part, we will use bootstrap to re-run the linear mixed model for power and sample size evaluation. We assume equal sample size for Moxifloxacin and Placebo group. For a given sample size, we get bootstrapped sample from data that was used in the analysis. Each subject is a sampling unit, and therefore, if a subject is chosen, then all the records belonging to this subject will be used. We will do $B = 1000$ bootstrapings to evaluate the power.
+
+Below is an example of power calculated when 13 subjects for each treatment are to be sampled from the data.
+```{r}
+
+### do bootstrapping for sample size
+
+# n is the sample size
+# b is the number of bootstraps
+# obj is the result run from linear mixed models
+
+bootstrap_sampsize <- function(n, b = 1000, data = ana_data){
+
+  # do bootstrap sampling
+  mox_id <- as.vector(unique(data$ptno[data$treat=="Moxi"]))
+  plb_id <- as.vector(unique(data$ptno[data$treat=="Placebo"]))
+
+  ddqtcf <- matrix(NA, ncol = 5, nrow = b)
+
+  for(i in 1:b){
+
+    mox_b <- sample(mox_id, n);
+    plb_b <- sample(plb_id, n);
+    data_b <- data[data$ptno %in% c(mox_b, plb_b), ]
+
+    mod <- lmer(data = data_b, changeQTcF ~ (P_HOUR-1)  + treat +
+                   dBQTcF + lgconc + (lgconc+1|ptno) )
+    result <- summary(mod)
+
+    ddqtcf[i, ] <- calculate_ci(result, data_b)
+  }
+
+  return(ddqtcf)
+}
+
+ b1_s <- bootstrap_sampsize(n = 13, b = 100, data = ana_data)
+mean(b1_s[, 4] > 5)
+
+```
+
+The estimated power should be around 87%. Below is a table for power evaluation for different choice of sample size per treatment.
+
+
+Table: Power evalution for different sample size per treatment.
+
+| sample size | 6    | 7    | 10   | 11   | 12   | 13   | 14   | 16   |
+| --------    | -----| -----| -----| -----| -----| -----| -----| -----|
+| power       | 0.465|0.556 |0.692 | 0.776|0.838 | 0.874|0.930 |0.997 |
+
+From the above table, we can see that Merck has 50% (18 used, 12 needed) more subjects than necessary to achive a power of 80%.
+
+
+# Optimal Two-Stage designs
+
+## Background
+This part is an exploration of Simon's 1989 paper [@simon1989optimal]. In this paper, the author discussed the optimal sample size for a two stage design, where the goal of this design is to compare the response rate of a new drug:
+\begin{equation}\label{EQ:oneprop}
+H_0:  p \leq p_0    \text{~~~~~VS~~~~~} H_1: p \geq p_1
+\end{equation}
+
+In this design, the null is that the true response probability is less than some uninteresting level $p_0$. If $H_0$ is true, then we require that the type 1 error should be less than $\alpha$, whereas if $H_1$ is true, then the power to reject the null should be at least $1-\beta$. In addition to these constraints, we wish to minimize the number of patients treated with a drug of low activity. The attention is restricted to two-stage designs.
+
+## Optimal two-stage designs
+
+If the number of patients in the first and second stage are denoted by $n_1$ and $n_2$ respectively, then the expected sample size is $EN=n_1 + (1-PET)n_2$, where $PET$ is the probability of early termination after the first stage. With a true response probability $p$, we'll terminate the experiment at the end of the first stage and reject the drug (or fail to reject $H_0$) if $r_1$ or fewer responses are observed. This occurs with probability $PET= B(r_1, n_1, p)$, where $B$ is cummulative binomial distribution. We'll reject the drug at the end of the second stage if $r$ or fewer responses are observed. Hence the probability of rejecting a drug with success probability $p$ is
+\begin{equation}\label{EQ:probrej}
+ B(r_1, n_1, p) + \sum_{x = r_1 + 1}^{\min\{n_1, r\}}b(x, n_1, p)B(r-x, n_2, p)
+\end{equation}
+where $b$ denotes the binomial probability mass function.
+
+The design approach considered here is to specify the parameters $p_0, p_1, \alpha$ and $\beta$ and then determine the two-stage design that satisfies the error probability constriants and minimizes the expected sample size when the response probability is $p_0$. The optimization is taken over all values of $n_1$ and $n_2$, as well as $r_1$ and $r$. Early acceptance of the drug is not permitted here.
+
+## Searching optimal design parameters
+
+For specified values of $p_0, p_1, \alpha$ and $\beta$, the optimal design is found by enumeration using exact binomial probabilities. For each value of total sample size $n$ and each value of $n_1$ in the range $(1, n-1)$, we determine the integer value of $r_1$ and $r$. The chosen $(r_1, r)$ minimizes the expected sample size when $p=p_0$, which was found by searching over the range $r_1\in (0, n_1)$. For each value of $r_1$, we determine the max value of $r$ that meets the power constraint. We then examine whether the set of parameters $(n, n_1, r_1, r)$ satisfies the type 1 error constraint. If it does, then we compare the expected sample size to the minimum achived by previous feasible designs and continue the search over $r_1$.  Keeping $n$ fixed, we search over the range of $n_1$ to find the optimal two-stage design for that maximum sample size $n$. The search over $n$ ranges from a lower value of about
+\begin{equation}
+\bar{p}(1-\bar{p})\bigg[\frac{z_{1-\alpha} + z_{1-\beta}}{p_1 - p_0}\bigg]^2
+\end{equation}
+where $\bar{p} = (p_0 + p_1)/2$.
+
+
+Here's the code to implement the searching process
+```{r}
+#
+## Optimal two stage design
+## hypothesis H0: p <= p0; VS  H1: p >= p1
+
+ p0 <- 0.05; # Null
+ p1 <- 0.25; # alternative
+ alpha <- 0.1; # type 1 error
+ beta <- 0.1  # type 2 error
+
+library(dplyr)
+ # starting sample size
+ start_n <- function(p0, p1, alpha, beta){
+   p_bar <- (p0 + p1)/2
+   z_alpha <- qnorm(1-alpha)
+   z_beta <- qnorm(1-beta)
+   n <- p_bar*(1-p_bar)*((z_alpha + z_beta)/(p1-p0))^2
+   return(ceiling(n))
+ }
+
+# calculate the probability of rejecting the null
+# depending on the parameter configuration,
+# if p is under the null, this calculates type 1 error;
+# whereas if p following the alternative, this calculates the power.
+calc_prob <- function(r1, r, n1, n2, p){
+   # if rejected the drug at the first stage....
+   s1 <- pbinom(r1, n1, p)
+   cel <- min(n1, r)
+
+   # passed the first stage, but rejected eventually
+   part2 <- function(x){
+     dbinom(x, n1, p)*pbinom(r-x, n2, p)
+   }
+
+   s2 <- 0
+   # the probability of rejecting the null at the second stage....
+   for (j in (r1+1:cel)){
+     s2 <- s2 + part2(j)
+   }
+
+   return(1- s1 - s2)
+ }
+
+
+expected_n <- function(r1, p, n1, n2){
+  pet <- pbinom(r1, n1, p)
+  EN <- n1 + (1-pet)*n2
+  return(EN)
+}
+
+# for a given sample size, calculate the type 1 error and power
+# this will give all possible outcomes that meets type 1 error and power constraint.
+calc_alpha_beta <- function(n, p0, p1, alpha, beta){
+
+  # all possible values of n1 given total number is n
+  n1 <- seq(1, n-1, by = 1)
+  # sample size in Stage 2
+  n2 <- n - n1
+
+  df_rlt <- data.frame(matrix(ncol =7))
+  names(df_rlt) <- c("r1", "r", "n1", "n2", "alpha_1", "pwr1", "EN")
+  # loop over n1 to find r1 and r
+  for (i in 1:length(n1)){
+    # initiate r1
+    r1 <- seq(0, n1[i], by = 1)
+    for (k in 1:length(r1)){
+      # for all possible r given the current r1
+      r <- seq(r1[k], n, by = 1)
+      for (l in 1:length(r)){
+      pwr1 <- calc_prob(r1[k], r[l], n1 = n1[i], n2 = n2[i], p = p1)
+      t1err <- calc_prob(r1[k], r[l], n1 = n1[i], n2 = n2[i], p = p0)
+      en <- expected_n(r1[k], p0, n1[i], n2[i])
+      rlt <- data.frame(r1[k], r[l], n1[i], n2[i], t1err, pwr1, en)
+      names(rlt) <- c("r1", "r", "n1", "n2", "alpha_1", "pwr1", "EN")
+      if (t1err <= alpha & pwr1 >= 1-beta){
+      df_rlt <- bind_rows(df_rlt, rlt)
+      }
+
+      }
+    }
+  }
+  return(df_rlt[-1, ])
+}
+
+
+# find the optimal design
+find_n <- function(df){
+  df1 <- df %>% filter(r == max(r)) %>%
+    filter(EN == min(EN))
+  return(df1)
+}
+
+
+# an example
+n_init <- start_n(0.05, 0.25, 0.1, 0.1)
+df0 <- calc_alpha_beta(n = 24, p0 = 0.05, p1 = 0.25, alpha = 0.1, beta = 0.1)
+df1 <- find_n(df0)
+df1
+```
+
+# Survival Analysis Notes
+
+## Basic concept and definition
+The basic quality used to describe time-to-event phenomena is the **survival function**, the probability of an individual surviving beyond time $x$ (experiencing an event after time x). It is defined as 
+\begin{equation}
+S(x) = Pr(X>x)
+\end{equation}
+
+Hazard function is another fundamental function in survival analysis, also known as the conditional failure rate in reliability, the force of mortality in demography, the intensity function in stochastic processes. The **hazard rate** is defined as
+\begin{equation}
+h(x) = \lim_{\Delta x \rightarrow 0}\frac{P(x \leq X < x + \Delta x|X \geq x)}{\Delta x}
+\end{equation}
+If $X$ is a continuous random variable, then 
+\begin{equation}
+h(x) = f(x)/S(x) = -d\ln[S(x)]/dx
+\end{equation}
+Naturally, the cumulative hazard function is defined by the integral of the hazard function from time 0 up to $x$, $H(X) = \int_0^{x}h(t)dt= -\ln[S(x)]$.
+
+**Mean residual life** (MRL) is the expected remaining lifetime, defined as $\text{mrl}(x) = E(X-x|X>x)$.
+
+
+## Censoring and truncation
+
+One particular feature of time-to-event data is \textit{censoring}, which, broadly speaking, occurs when some lifetimes are known to have occurred only within certain intervals. The types of censoring can be categorized (with subcategories) as 
+
+  + right censoring
+       + \textit{Type I censoring}: The event can only be observed if it occurs prior to some pre-specified time $C_r$. 
+       + \textit{Type II censoring}: The study continues until the failure of the first $r$ individuals, where $r$ is some pre-determined integer ($r < n$).
+       + \textit{Complete risks censoring}: This happens when the researcher is interested in estimation of the marginal distribution of some event but some individuals under study may experience some competing event which causes them to be removed from the study.
+  + left censoring: when the event time is less than a censoring time $C_l$. For such individuals, we know that the event occurred before time $C_l$, but we don't know the exact event time.  
+  + Interval censoring: when the lifetime is only known to occur within an interval. Such censoring may happen when patients in a clincal trial or longitudinal study have periodic follow-up and the patient's event time is only known to fall in an interval $(L_i, R_i]$.
+
+The data of this type of experiment can be represented by pairs of random variables $(T, \delta)$, where $\delta$ indicates whether the lifetime $X$ is observed ($\delta =1$) or censored ($\delta = 0$), and $T$ is equal to $X$ if the lifetime is observed, equal to $C_r$ if right censored, and equal to $C_l$ if left censored.
+
+\textit{Truncation} of survival data occurs when only those individuals whose event time lies within a certain observational window $(Y_L, Y_R)$ are observed. An individual whose event time does not fall in this interval is not observed, and therefore no information on this subject is available to the investigator. **This is contrast to censoring where there is at least partial information on each subject**. Becasue we are only aware of individuals with event times in the observational window, the inference for truncated data is restricted to conditional estimation.  
+
+## Nonparametric Estimation of censored and truncated data
+
+### Right censored data
+    
+  + Kaplan and Meier (1958) estimation of survival function (also called the Product-limit estimator) for *right-censored* data
+    
+    \begin{equation}
+    \hat{S}(t) = 
+      \begin{cases}
+        1 &\text{if $t < t_1$}\\
+        \prod_{t_i\leq t}[1- \frac{d_i}{Y_i}] &\text{if $t_1\leq t$}
+      \end{cases}
+   \end{equation}
+where $Y_i$ is a count of the number of individuals with a time on study of $t_i$ or more (i.e., the number of individuals who are alive at $t_i$ or experience the event of interest at $t_i$) , and $d_i$ is the number of events at time $t_i$.  The variance of Kaplan-Meier estimator is given by Greenwood's formula
+\begin{equation}
+ \hat{V}[\hat{S}(t)] = \hat{S}(t)^2\sum_{t_i\leq t}\frac{d_i}{Y_i(Y_i-d_i)}.
+\end{equation}
+The product-limit method can be used to estimate the cumulative hazard function $H(t) = -\ln[S(t)]$.
+
+  + Nelson-Aalen estimator: An alternative estimator of the cumulative hazard rate 
+  \begin{equation}
+    \tilde{H}(t)= 
+    \begin{cases}
+     0 & \text{if $t\leq t_1$}\\
+     \sum_{t_i\leq t}\frac{d_i}{Y_i} &\text{if $t_1\leq t$}
+    \end{cases}
+  \end{equation}
+ whose variance is given by 
+  \begin{equation}
+   \sigma^2_H(t) = \sum_{t_i\leq t}\frac{d_i}{Y_i^2}.
+  \end{equation}
+It has better small-sample-size performance as compared to product-limit estimator. 
+
+### Left-truncated data
+
+The basical idea of Kaplan-Meier estimator and Nelson-Aalen estimator can be used to estimate the survival function of left-truncated data. Note that the product-limit estimator of the survival function at a time $t$ is now an estimator of the probability of survival beyond $t$, conditional on survival to the smallest of the entry times $L$, $Pr[X>t|X\geq L] = S(t)/S(L)$. Similarly the Nelson-Aalen statistic estimates the integral of the hazard rate over the interval $L$ to $t$. Note that the slope of the Nelson-Aalen estimator still provides an estimator of the unconditional hazard rate. 
+  
+### Other sampling scheme
+
+There are other types of sampling scheme, namely, left, double, and interval censoring, right-truncation, and grouped data. Each sampling scheme provides different information about the survival function and requires a different technique for estimation. The (modified) product-limit estimator and Nelson-Aalen estimator will be applicable to those sampling schemes. 
+
+### Univariate estimation  
+Kernel-smoothing technique can be used to provide a better estimator of the hazard rate (i.e., the slope of the Nelson-Aalen estimator). Sometimes, the investigator is interested in comparing the hazard rates in the treatment group to the known hazard rates in the reference group. The motality in the treatment group may have either a multiplicative or additive effect on the reference hazard rate. The estimation of survival function could also be considered from a Bayesian perspective. 
+
+Kernel-smoothed estimators of $h(t)$ are based on the Nelson-Aalen estimator $\tilde{H}(t)$ and its variance $\hat{V}[\tilde{H}(t)]$.
+
+Another one is the Bayes estimator. Analogous to the simple parametric case, we may use a squared-error loss function
+\begin{equation}\notag
+L(S,\hat{S}) = \int_0^{\infty} [\hat{S}(t) - S(t)]^2dw(t)
+\end{equation}
+where $w(t)$ is a weight function. Two classes of prior distribution have been suggested for this problem. The priors are chosen because they are the conjugate prior of either the survival function or the hazard function. *A congugate prior means the prior and the posterior distribution are in the same family*.
+
+
+The first prior is for the survival function, which is assumed to be a random sample from a Dirichlet process [@teh2011dirichlet] with a parameter function $\alpha$. The Dirichlet process used here can be thought as a stick-breaking problem: starting with a stick of length 1, we break it at $\beta_1$, assigning $1-S(t_1)$ to be the length we just broke off; we will recursively break the other portion to obtain $S(t_2), S(t_3)$, and so forth. To assign a prior distribution to the survival function, we assume that $S(t)$ follow a Dirichlet distribution with parameter function $\alpha$. It is typical to take the parameter function as $a([t, \infty)) = cS_0(t)$ where $S_0(t)$ is our prior guess at the survival function and $c$ is a measure of how much weight to put on our prior guess. With this prior, the prior mean is expressed by 
+\begin{equation}\notag
+E[S(t)] = \frac{\alpha(t, \infty)}{\alpha(0, \infty)} = \frac{cS_0(t)}{cS_0(0)} = S_0(t)
+\end{equation}
+
+The data we have available to combine with our prior consists of the on study time $T_j$ and the event indicatior, $\delta_j$. Let $0 = t_0 <t_1 < \cdots < t_M < t_{M+1} = \infty$, denote the $M$ distinct times. At time $t_i$, let $Y_i$ be the number of individuals at risk, $d_i$ the number of deaths and $\lambda_i$ the number of censored observations. Let $\Delta_i$ be 1 if $d_i>0$ and 0 if $d_i = 0$. 
+
+Combining this data with the prior, we can show that the posterior distribution of $S$ is also Dirichlet. The parameter for the posterior distribution, $\alpha^{\ast}$, is the original $\alpha$ plus a point mass of one at points where deaths occur. That is, for any interval $(a, b)$, 
+\begin{equation}\notag
+\alpha^{\ast}([a, b]) = \alpha([a, b]) + \sum_{j=1}^nI[\delta_j >0 , a < T_j < b], 
+\end{equation}
+where $I[]$ is the indicator function. The Bayes estimator of the survival function is 
+\begin{equation}\notag
+\tilde{S}_D(t) = \frac{\alpha(t, \infty) + Y_{i+1}}{\alpha(0, \infty) + n} \prod_{k=1}^i\frac{\alpha(t_k, \infty) + Y_{k +1} + \lambda_k}{\alpha(t_k, \infty) + Y_{k +1}}, \text{~~ for } t_i\leq t<t_{i+1}, i = 0, \ldots, M
+\end{equation}
+The Bayes estimator is a continuous function between the distinct death times and has jumps at these death times. For large $n$ this reduces to the Kaplan-Meier estimator, so that the prior information plays no role in the estimate. For small samples, the prior will dominate, and the estimator will be close to the prior guess at $S$.
+
+### Hypothesis testing
 
 
 
