@@ -27,11 +27,6 @@ knitr::opts_chunk$set(echo = TRUE)
 \newpage
 # Non-inferiority test on response rate
 
-## Study Information
-
-  * Client name: Adello biologics, LLC (Formerly known as Therapeutic Proteins, LLC)
-  * Celerion Study No. CA18641
-
 **NOTE FROM BIN (1)**: in the experiment, subjects will undergo the following steps (in order):
 
   * **_ADA screening test_**. If the screening result is *NEGATIVE*, then the result will be recoreded  *NEGATIVE*, otherwise screening *POSITIVE* and continue
@@ -59,7 +54,7 @@ results relate to clinical impact in the subject).
 ## Case Study
 
 
-The goal of this study is to compare immunogenicity of Theragrastim^&#174;^ (new drug) and Neupogen^&#174;^ (reference drug) after multiple subcutaneous (SC) administrations in healthy subjects.  ADA levels for Theragrastim&#174; and Neupogen&#174; will be estimated and compared to evaluate potential difference between the two products in the incidence of human immune responses.
+The goal of this study is to compare immunogenicity of T^&#174;^ (new drug) and N^&#174;^ (reference drug) after multiple subcutaneous (SC) administrations in healthy subjects.  ADA levels for Theragrastim&#174; and Neupogen&#174; will be estimated and compared to evaluate potential difference between the two products in the incidence of human immune responses.
 
 This is a one center, single-blind, randomized, parallel, multiple-dose, safety and
 immunogenicity study. A total number of one hundred thirty four (134) healthy adult male and female subjects will be enrolled and randomized to 1 of 2 treatments (67 subjects per treatment).
@@ -71,26 +66,26 @@ non-inferiority margin (10%)
 
 The power calculation for sample size is based on the following assumptions:
 
-  * The ADA+ rate of Neupogen^&#174;^ is 3.3%
-  * The ADA+ rate of Theragrastim^&#174;^ is 3.3%
+  * The ADA+ rate of N^&#174;^ is 3.3%
+  * The ADA+ rate of T^&#174;^ is 3.3%
   + The mean ADA+ rate difference ($\delta$) between the two products is zero;
   + The NI margin ($\delta_0$) is 10%.
 
 The power calculation is based on exact method [@chan1999test] using $\delta$-projected $Z$-statistic (i.e., the score statistic) with REML estimation procedure [@miettinen1985comparative].
 
 ## Statistical Analysis
-The rate (or proportion) of subjects that have ADA+ in confimatory test and neutralizing test (if needed) will be compared between Theragrastim^&#174;^ and
-Neupogen^&#174;^ treatments to determine if any differences are statistically meaningful.
+The rate (or proportion) of subjects that have ADA+ in confimatory test and neutralizing test (if needed) will be compared between T^&#174;^ and
+N^&#174;^ treatments to determine if any differences are statistically meaningful.
 
 
 ### Statistical method
 
 
-The rate difference between Theragrastim^&#174;^ and Neupogen^&#174;^ will be defined as:
+The rate difference between T^&#174;^ and N^&#174;^ will be defined as:
 \begin{equation}\label{eq:adadiff}
 \delta = \pi_1 -\pi_2
 \end{equation}
-where $\pi_1$ is the ADA+ rate of Theragrastim^&#174;^ and  $\pi_2$ is that of Neupogen^&#174;^.
+where $\pi_1$ is the ADA+ rate of T^&#174;^ and  $\pi_2$ is that of N^&#174;^.
 
 In hypotheses testing, the research or alternative hypothesis
 represents what the study aims to show. The null hypothesis is the
@@ -105,7 +100,7 @@ Note that in SAS, the null in Expression (\ref{eq:immunetest}) is equivalently s
 \begin{equation}\label{eq:immunetest2}
 H_0: \pi_2 - \pi_1 \leq -0.10~~~  VS~~~~~ H_1: \pi_2 - \pi_1 > -0.1
 \end{equation}
-Therefore, in the SAS output, the null is rejected (i.e., Theragrastim^&#174;^ is non-inferior to Neupogen^&#174;^ in terms of ADA+ rate) if the lower bound of the one-sided 95% CI of the difference is above NI margin (-0.10).
+Therefore, in the SAS output, the null is rejected (i.e., T^&#174;^ is non-inferior to N^&#174;^ in terms of ADA+ rate) if the lower bound of the one-sided 95% CI of the difference is above NI margin (-0.10).
 
 ### SAS implementation
 
@@ -133,18 +128,18 @@ and response as this one.
 data test;
 input Time $ treat $ response $ count;
 datalines;
-    C2 neupogen positive 5
-    C2 neupogen negative 62
-    C2 theragrastim positive 3
-    C2 theragrastim negative 64
-    C3 neupogen positive 5
-    C3 neupogen negative 62
-    C3 theragrastim positive 3
-    C3 theragrastim negative 64
-    C4 neupogen positive 5
-    C4 neupogen negative 62
-    C4 theragrastim positive 3
-    C4 theragrastim negative 64
+    C2 n positive 5
+    C2 n negative 62
+    C2 t positive 3
+    C2 t negative 64
+    C3 n positive 5
+    C3 n negative 62
+    C3 t positive 3
+    C3 t negative 64
+    C4 n positive 5
+    C4 n negative 62
+    C4 t positive 3
+    C4 t negative 64
     ;
 Run;
 \end{verbatim}
