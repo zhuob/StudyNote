@@ -1,0 +1,110 @@
+---
+title: "Adaptive Design"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Reference
+  + [FDA Guidance](https://www.fda.gov/downloads/drugs/guidances/ucm201790.pdf)
+  
+
+## Definition
+
+According to FDA guidance, an *adaptive design clinical study* is defined as a study that introduces a propsectively planned opportunity for modification of one or more specified aspects of the study design and hypotheses based on analysis of data (usually interim data) from subjects in the study. Analyses of the accumulating study data are performed at prospectively planned timepoints within the study, can be performed in a fully blinded manner or in an unblinded manner, and can occur with or without formal statistical hypothesis testing.
+  
+
+ + Adaptations based on an interim analysis of **unblinded results** of controlled trial
+    + Study integrity may be undermined by revisions not previously planned and made or proposed after unblinded interim analysis.
+ + Adaptation based on interim noncomparative analysis of **blinded data**
+    + Revisions based on blinded interim evaluation of data do not introuduce statistical bias to the study.
+
+ + The risk of bias is greatly reduced or entirely absent when adaptations rely only on blinded analyses and the blinding is strictly maintained.
+
+## What can be adapted?
+The range of possible study design modifications that can be planned in the prospectively written protocol includes, but is not limited to 
+
+  + study eligibility criteria
+  + randomization procedure
+  + treatment regimens of the different study group (e.g., does level, schedule, duration)
+  + total sample size of the study (including early termination)
+  + concomitant treatment used
+  + planned schedule of patient evaluations for data collection (e.g., number of intermediate timepoints, timing of last patient observation and duration of patient study participation)
+  + primary endpoint
+  + selection and/or order of secondary endpoints
+  + analytic methods to evaluate the endpoints (e.g., covariates of final analysis, statistical methodology, type 1 error control)
+  + In general, biase from analyses can be introduced when there are choices made based on unblinded analyses of data, whether of study endpoints or other information that correlates with study endpoints.
+  
+## Different concept
+  + *Seamless* indicates that there is no long pause after the interim analysis and that data collected from both before and after the interim analysis are used in the final analysis, describes the process of combining data in the final analysis, and is an element of the design.
+  + *Phase 2/3* can lead to confusion regarding whether the study was initially designed to be adequate and well-controlled (A&WC), and ultimately demonstrate effectiveness. 
+  + These two terms do not provide additional meaning beyond the term *adaptive*.
+  + *Group sequential design* is used for a situation in which multiple sequential analyses of a single primary hypothesis are conducted at successive interim stages of a clinical trial. It maintains control of the Type I error rate. 
+  
+## Pros and Cons
+
+  + Pros: adaptive design approaches may lead to a study that 
+    + more efficiently provides the same information
+    + increases the likelihood of success on the study objective
+    + yields improved understanding of the treatment's effect
+  + Concerns:
+    + possible introduction of bias
+    + increased possibility of an incorrect conclusion
+  + Study design changes that are not considered adaptive design
+    + revision after unplanned findings in an intreim analysis
+    + revisions based on information from a study external source
+    
+  
+## Two principal issues
+
+  + whether the adaptation process has led to design, analysis, or conduct flaws that have introduced bias that increases the chance of a false conclusion that the treatment is effective (a Type 1 error)
+  + whether the adaptation process has led to positive study results that are hard to intepret irrespective of having control of type 1 error
+  
+## Well understood adaptive designs
+
+  + Adaptation of study eligibility criteria based on analyses of pretreatment (baseline) data: 
+      + knowing baseline characeristics of the overall study population at any time during the study does not generate concerns of introducing statistical bias as long as the treatment assignment remains blinded.
+      + Possible risk is the potential to impair the interpretation of the study result when the study population changes mid-way and an important relationship of treatment effect to the changed patient characteristic exists.
+  + Adaptations to maintain study power based on blinded interim analyses of aggregate data
+      + Usually, the blinded interim analyses are used to make decisions to increase, but not to decrease, the sample size. Decrease in sample size is not advisable because of the chance of making a poor choice caused by the high variability of the effect size or vairance estimate early in the study.
+  + Adaptations based on interim results of an outcome unrelated to efficacy
+  + Adaptations using group sequential methods and unblinded analyses for early study termination because of either lack of benefit or demonstrated efficacy
+      + Because of the multiplicity arising from the several sequential interim analyses over time with multiple between-group analyses doen toe select groups to discontinue, statistical adjustments and the usual group sequential alpha spending adjustments need to be made in this case to control type 1 error.
+      + Methods of alpha spending approaches to address type 1 error control
+          + O'Brien-Fleming
+          + Lan-DeMets
+          + Peto 
+  + Adaptations in the data analysis plan not dependent on within study, between-group outcome differences
+  
+## Less well understood adaptive study designs
+  
+  + Adaptation for dose selection studies
+  + Adaptive randomization based on relative treatment group responses
+  + Adaptation of sample size based on interim-effect size estimates
+  + Adaptation of patient population based on treatment-effect estimates
+  + Adaptation for endpoint selection based on interim estimate of treatment effect
+  + Adaptation of multiple-study design features in a single study
+  + Adaptations in non-inferiority studies
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
