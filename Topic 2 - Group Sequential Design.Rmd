@@ -1,0 +1,76 @@
+---
+title: "Group Sequential Design"
+output: html_document
+---
+
+## Reference 
+
+  + https://www.biostat.washington.edu/sites/default/files/modules//2016_SISCR_9_3.pdf
+  + R package [RCTdesgn](http://www.rctdesign.org/Welcome.html)
+  
+
+## Adding interim analysis
+  
+  + Power decreases (unless sample size is increased)
+  + Expected sample size gets smaller
+  + With increasing number of interim analysis, the total average sampel number (ASN) decreases (see slide 8 of Reference 1)
+  
+### Reasons for stopping
+  
+  + Stop for either efficacy or futility
+      + this means stopping for both null and alternative hypothesis
+      + Symmetric power for futility and efficacy decisions
+      + Symmetric ASN for futility and efficacy decisions
+  + Stop only for futility (null hypothesis)
+      + Power for efficacy may decrease
+      + ASN reduced for futility, but not for efficacy
+  + Stop only for efficacy (alternative hypothesis)
+      + Power for efficacy may decrease
+      + ASN reduced for efficacy, but not for futility
+  
+### Selecting degree of early conservatism
+
+  + O'Brien-Flemming design shows early conservatism (i.e., relatively difficult to stop at early interim analyses)
+  + Pocock design is not conservative in early decisions (i.e., relatively easy to stop at early interim analyses)
+  + Degree of conservatism does not have to be symmetric.
+  
+### Effect of early conservatism
+  
+  + More conservatism (harder to stop at early analyses)
+      + Tends to give higher power
+      + Tends to give larger ASN
+  + Less conservatism (easier to stop)
+      + Tends to decrease power
+      + Tends to reduce ASN
+  + Asymmetric conservatism
+      + Often need early sensitivity for harm, but not conservatism for efficacy
+      
+      
+      
+### Design Evaluation
+  + Elements that are established in the fixed sample design
+      + Endpoint, prob model, functional, contrast
+      + Maximal information (sample size, $N_j$; design alternative hypotheses)
+      + Statistical standard for evidence ($\alpha$ level)
+  + Evaluation of group sequential design:
+      + sample size is a random variable; characteristics of interest:
+          + Mean (Average sample size - ASN)
+          + Quantiles (median, Q1, Q3)
+          + Power curve
+          + Power for fixed $N_j$
+          + $N_j$ for fixed power
+          + Stopping probability at each interim analysis
+          + Inference at the boundary: what is the statistical inference (point estimate, interval estimate, and p-value) that would be reported if the trial is stopped?
+  + Iterate: modify the stopping rules until an acceptable mixed of properties is found
+  
+  
+## General Behavior of Group Sequential Design  
+  + For any given sample size, adding interim analyses reduces power
+  + For any given power, adding interim analyses increases the sample size
+  + Having fewer interim analyses: 
+      + leads to properties (maxmial sample size, power, etc) that are closer to those of a fixed sample study
+      + however, ASN may be larger and stopping probabilities lower
+  + Having more earlier conservatism:
+      + leads to properties (maximal sample size, power, etc) that are closer to those of a fixed sample study
+      + however, ASN may be larger and stopping probabilities lower.
+  
