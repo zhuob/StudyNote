@@ -1,0 +1,55 @@
+---
+title: "Non-Inferiority Trial"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Reference 
+
+   + [FDA guidance](https://www.fda.gov/downloads/Drugs/Guidances/UCM202140.pdf)
+  
+  
+##  Non-Inferiority 
+
+In an NI study, the goal is to demonstrate that the test drug has an effect by showing that its effect is sufficiently close to the effect of an active control. 
+
+### Hypothesis
+
+
+  + There's no placebo arm in the study, therefore the effect of an active control is not measured in the study but must be assumed.
+  + The hypothesis is therefore 
+    \begin{equation}
+      H_0: C- T \geq M \text{ vs }  H_a: C - T < M
+    \end{equation}
+    where the null says T is inferior to the control (C) by $M$ or more, and the alternative is that T is inferior to the control by less than $M$. 
+    
+### Choice of NI Margin
+
+  + One choice for $M$ is to set it equal to the entire known effect of the active control relative to the placebo, based on past randomized trial. Such a choice of $M$ is called $M_1$.
+  + A more usual choice is to set $M$ equal to some clinically relevant portion of $M_1$, namely, the portion of the control drug effect it is important to preserve with the test drug, based on clinical judgement. 
+  + The determination of $M_1$ is a critical step in designing an NI trial and is often difficult.
+  + NI margin used in a trial ($M_2$) can be no larger than the entire assumed effect of the active control $M_1$.
+  + Even for a situation where the active control has a small effect, a clinical judgement may argue that a larger difference is not clinically important.
+  + Even if that clinical judgement were reasonable, choosing an $M_2$ greater than $M_1$ as the NI margin would not allow a conclusion that the test drug has any effect.
+  
+  
+### Statistical Inference
+
+  + Fixed margin: 95%-95% method - The first 95% refers to the confidence interval (lower bound) of the estimated effect of the control based on historical studies demonstrating the effect, and the second 95% refers to the confidence interval used to test the null hypothesis in the NI study.
+    + It is referred to as a fixed margin method because the past studies comparing the control drug with placebo are used to derive a single fixed value of $M_1$.
+    + The value typically chosen is the lower bound of the 95% confidence interval about the treatment effect of a single placebo-controlled trial.
+  
+  + Synthesis approach: Synthesizing data from the historical trials and the current NI trial, which reflects the variability in both data sources.
+    + This method treats both sources of data as if they came from the same randomized trial, to project what the placebo effect would have been had the placebo been present in the NI trial. 
+    + In this method, the fraction $M_2/M_1$ of the control effect that is to be preserved in evaluating NI is specified in advance, but neither quantity ($M_1$ or $M_2$) is specified.
+  + Mathematically, the 95%-95% method and the sythesis method are equivalent, with just different standard errors (see formula in FDA guidance page 15), however the first method comes with larger standard error.
+  + As a result, the 95%-95% method is more conservative compared to synthesis approach.
+  
+  
+  
+  
+  
+  
