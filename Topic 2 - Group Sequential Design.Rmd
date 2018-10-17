@@ -73,4 +73,42 @@ output: html_document
   + Having more earlier conservatism:
       + leads to properties (maximal sample size, power, etc) that are closer to those of a fixed sample study
       + however, ASN may be larger and stopping probabilities lower.
+      
+# Theory on Group Sequential Design
+
+## Reference 
+
+  + Repeated Significance Tests on Accumulating Data, **P. Armitage, C. K. McPherson and B. C. Rowe**,  *Journal of the Royal Statistical Society. Series A (General) Vol. 132, No. 2 (1969), pp. 235-244*
+  + [Group Sequential Methods in the Design and Analysis of Clinical Trials](ftp://maia-2.biostat.wisc.edu/pub/chappell/641/papers/paper33.pdf), **Stuart J. Pocock**, *Biometrika, Vol. 64, No. 2 (Aug., 1977), 191-199.* 
+  + [A Multiple Testing Procedure for Clinical Trials](ftp://maia-2.biostat.wisc.edu/pub/chappell/641/papers/paper34.pdf), **Peter C. O'Brien and Thomas R. Fleming**, *Biometrics, Vol. 35, No. 3 (Sep., 1979), 549-556.*
+  
+  
+## Framework
+This framework of GSD is based on the references listed above. For simplicity, the theory is discussed in the context of normal distribution; The results however, can be generalized into other distribution families. 
+
+### Summary based on Armitage 1969
+Consider an experiment consisting of a series of observations $X_1$, $X_2$, $\ldots$, $X_n$ on random variables that, under the null hypothesis, are i.i.d. $N(0, 1)$. After each observation, the experimenter uses the cumulative sum 
+\begin{equation}\label{eq:eq1}
+S_n = \sum_{i=1}^nX_i
+\end{equation}
+to test the null hypothesis. He stops sampling when, for the first time, 
+\begin{equation}\label{eq:eq2}
+|S_n|\geq y_n, 
+\end{equation}
+where $y_n = k\sqrt{n}$ for some constant $k$. The value of $n$ at which the experiment stops is denoted by $m$. Usually, $k$ is chosen to correspond to a non-sequential test for $S_n$ at a selected significance level. For two-sided level $2\alpha$, with the usual notation for the normal integral, $\Phi(k) = 1-\alpha$. 
+
+Now the problem boils down to finding the distribution of $m$. Let $f_n(s_n)$ be the probability density function of $S_n$ in the sequential procedure. We then have 
+\begin{equation}
+f_n(s_n) =\left\{ 
+  \begin{array}{ll}
+  \int_{-y_{n-1}}^{y_{n-1}}f_{n-1}(u)\frac{1}{\sqrt{2\pi}}\exp\{-\frac{1}{2}(s_n-u)^2\}du, ~~ -y_n\leq s_n\leq y_n \\
+    0, ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ \text{otherwise}
+  \end{array}
+  \right.
+\end{equation}
+Which is obtained by convolution formula given that $S_{n-1}\sim f_{n-1}(s_{n-1})$, $X_n\sim N(0, 1)$ and $S_n = X_n + S_{n-1}$. 
+
+The density function $f_n$ can be defined recursively with $f_1$ being the density for standard normal distribution 
+  
+
   
